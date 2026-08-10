@@ -1,4 +1,12 @@
 <view wx:if="{{exercise}}" class="page safe-bottom">
+  <view class="intro">
+    <view class="title">{{exercise.name}}</view>
+    <view class="tag-row">
+      <text class="tag tag-primary">{{exercise.category}}</text>
+      <text class="tag tag-level">{{exercise.level}}</text>
+    </view>
+  </view>
+
   <view class="media-wrap">
     <image class="media poster" src="{{exercise.image}}" mode="aspectFit" />
     <image
@@ -20,22 +28,19 @@
   </view>
 
   <view class="content">
-    <view class="tag-row">
-      <text class="tag tag-primary">{{exercise.category}}</text>
-      <text class="tag">{{exercise.level}}</text>
-    </view>
-    <view class="title">{{exercise.name}}</view>
-    <view class="equipment">使用器械：{{exercise.equipment}}</view>
-
-    <view class="muscle-card">
-      <view class="muscle-item">
-        <view class="muscle-label">主要肌群</view>
+    <view class="info-grid">
+      <view class="info-card">
+        <view class="info-label">使用器械</view>
+        <view class="info-value">{{exercise.equipment}}</view>
+      </view>
+      <view class="info-card">
+        <view class="info-label">主要肌群</view>
         <view class="muscle-values">
           <text wx:for="{{exercise.primaryMuscles}}" wx:key="*this" class="muscle-pill">{{item}}</text>
         </view>
       </view>
-      <view wx:if="{{exercise.secondaryMuscles.length}}" class="muscle-item muscle-secondary">
-        <view class="muscle-label">次要肌群</view>
+      <view wx:if="{{exercise.secondaryMuscles.length}}" class="info-card info-card-wide">
+        <view class="info-label">次要肌群</view>
         <view class="muscle-values">
           <text wx:for="{{exercise.secondaryMuscles}}" wx:key="*this" class="muscle-pill muscle-pill-light">{{item}}</text>
         </view>
@@ -44,8 +49,8 @@
 
     <view class="section">
       <view class="section-heading">
-        <text class="section-number">01</text>
         <text class="section-title">动作步骤</text>
+        <text class="section-number">STEP 01</text>
       </view>
       <view wx:for="{{exercise.steps}}" wx:key="*this" class="step">
         <view class="step-index">{{index + 1}}</view>
@@ -55,8 +60,8 @@
 
     <view class="section">
       <view class="section-heading">
-        <text class="section-number warning-number">02</text>
         <text class="section-title">注意事项</text>
+        <text class="section-number warning-number">SAFE 02</text>
       </view>
       <view class="caution-card">
         <view wx:for="{{exercise.cautions}}" wx:key="*this" class="caution-item">

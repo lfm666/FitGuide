@@ -4,10 +4,10 @@
     "pages/exercise/detail"
   ],
   "window": {
-    "navigationBarBackgroundColor": "#f5f7f8",
-    "navigationBarTextStyle": "black",
+    "navigationBarBackgroundColor": "#123b31",
+    "navigationBarTextStyle": "white",
     "navigationBarTitleText": "FitGuide",
-    "backgroundColor": "#f5f7f8",
+    "backgroundColor": "#f6f7f3",
     "backgroundTextStyle": "dark"
   },
   "sitemapLocation": "sitemap.json",

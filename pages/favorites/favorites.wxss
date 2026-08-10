@@ -1,0 +1,23 @@
+@import "../index/index.wxss";
+
+.favorites-header {
+  padding: 48rpx 32rpx 40rpx;
+  color: #fff;
+  background: #123b31;
+}
+
+.favorites-title {
+  margin-top: 14rpx;
+  font-size: 48rpx;
+  font-weight: 800;
+}
+
+.favorites-copy {
+  margin-top: 10rpx;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 24rpx;
+}
+
+.favorites-content .result-bar {
+  padding-top: 34rpx;
+}

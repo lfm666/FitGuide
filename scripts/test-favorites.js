@@ -20,13 +20,13 @@ assert.deepEqual(getFavoriteIds(), ['valid-id'])
 let page
 global.Page = (config) => { page = config }
 stored = ['seated-lat-pulldown']
-require('../pages/index/index')
+require('../pages/favorites/favorites')
 
 const context = {
   data: {},
   setData(value) { Object.assign(this.data, value) }
 }
-page.applyFilters.call(context, '', '收藏')
+page.onShow.call(context)
 assert.deepEqual(context.data.exercises.map(({ id }) => id), stored)
 
 console.log('本地收藏检查通过')

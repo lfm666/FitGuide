@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/favorites/favorites",
     "pages/exercise/detail"
   ],
   "window": {
@@ -9,6 +10,26 @@
     "navigationBarTitleText": "FitGuide",
     "backgroundColor": "#f6f7f3",
     "backgroundTextStyle": "dark"
+  },
+  "tabBar": {
+    "color": "#7d8783",
+    "selectedColor": "#17a673",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "动作库",
+        "iconPath": "assets/tabbar/library.png",
+        "selectedIconPath": "assets/tabbar/library-active.png"
+      },
+      {
+        "pagePath": "pages/favorites/favorites",
+        "text": "收藏",
+        "iconPath": "assets/tabbar/favorite.png",
+        "selectedIconPath": "assets/tabbar/favorite-active.png"
+      }
+    ]
   },
   "sitemapLocation": "sitemap.json",
   "lazyCodeLoading": "requiredComponents"

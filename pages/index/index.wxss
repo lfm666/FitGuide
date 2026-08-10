@@ -158,6 +158,10 @@
   padding: 0 24rpx 8rpx;
 }
 
+.equipment-categories {
+  padding-top: 4rpx;
+}
+
 .category-button {
   min-width: 92rpx;
   height: 64rpx;

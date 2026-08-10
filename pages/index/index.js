@@ -1,48 +1,49 @@
 const { exercises, disclaimer } = require('../../data/exercises')
 const { categoryOrder, filterExercises } = require('../../utils/exercises')
-const { getFavoriteIds } = require('../../utils/favorites')
 const exerciseCards = exercises.map((exercise) => ({
   ...exercise,
   primaryMusclesText: exercise.primaryMuscles.join(' · ')
 }))
-const categories = [categoryOrder[0], '收藏', ...categoryOrder.slice(1)]
+const equipments = ['全部器械', ...new Set(exercises.map(({ equipment }) => equipment))]
 
 Page({
   data: {
-    categories,
+    categories: categoryOrder,
+    equipments,
     exercises: exerciseCards,
     query: '',
     activeCategory: '全部',
+    activeEquipment: '全部器械',
     disclaimer
   },
 
   onSearchInput(event) {
-    this.applyFilters(event.detail.value, this.data.activeCategory)
+    this.applyFilters(event.detail.value, this.data.activeCategory, this.data.activeEquipment)
   },
 
   onCategoryTap(event) {
-    this.applyFilters(this.data.query, event.currentTarget.dataset.category)
+    this.applyFilters(this.data.query, event.currentTarget.dataset.category, this.data.activeEquipment)
+  },
+
+  onEquipmentTap(event) {
+    this.applyFilters(this.data.query, this.data.activeCategory, event.currentTarget.dataset.equipment)
   },
 
   onShow() {
-    this.applyFilters(this.data.query, this.data.activeCategory)
+    this.applyFilters(this.data.query, this.data.activeCategory, this.data.activeEquipment)
   },
 
-  applyFilters(query, category) {
-    const filtered = filterExercises(exerciseCards, query, category === '收藏' ? '全部' : category)
-    const favoriteIds = category === '收藏' ? getFavoriteIds() : []
-
+  applyFilters(query, category, equipment = '全部器械') {
     this.setData({
       query,
       activeCategory: category,
-      exercises: category === '收藏'
-        ? filtered.filter(({ id }) => favoriteIds.includes(id))
-        : filtered
+      activeEquipment: equipment,
+      exercises: filterExercises(exerciseCards, query, category, equipment)
     })
   },
 
   clearFilters() {
-    this.applyFilters('', '全部')
+    this.applyFilters('', '全部', '全部器械')
   },
 
   openExercise(event) {

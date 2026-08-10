@@ -1,0 +1,62 @@
+<view class="page favorites-page safe-bottom">
+  <view class="favorites-header">
+    <view class="eyebrow">FAVORITES</view>
+    <view class="favorites-title">我的收藏</view>
+    <view class="favorites-copy">把常练的动作放在一起</view>
+  </view>
+
+  <view class="content favorites-content">
+    <view class="result-bar">
+      <text class="result-title">收藏动作</text>
+      <text class="result-count">{{exercises.length}} 个动作</text>
+    </view>
+
+    <view wx:if="{{exercises.length}}" class="exercise-list">
+      <view
+        wx:for="{{exercises}}"
+        wx:key="id"
+        wx:for-index="index"
+        class="exercise-card"
+        hover-class="card-pressed"
+        data-id="{{item.id}}"
+        bindtap="openExercise"
+        role="button"
+        aria-label="查看{{item.name}}动作详情"
+      >
+        <view class="cover-wrap">
+          <image
+            wx:if="{{!item.imageFailed}}"
+            class="cover"
+            src="{{item.image}}"
+            mode="aspectFill"
+            lazy-load
+            data-index="{{index}}"
+            binderror="onImageError"
+          />
+          <view wx:else class="cover-fallback">
+            <text class="fallback-mark">FG</text>
+            <text class="fallback-name">{{item.name}}</text>
+          </view>
+        </view>
+        <view class="card-content">
+          <view class="card-title-row">
+            <view class="exercise-name">{{item.name}}</view>
+            <text class="level-tag">{{item.level}}</text>
+          </view>
+          <view class="equipment">器械 · {{item.equipment}}</view>
+          <view class="muscle-row">
+            <text class="muscle-icon">◉</text>
+            <text class="muscle-text">{{item.primaryMusclesText}}</text>
+          </view>
+        </view>
+        <text class="card-arrow" aria-hidden="true">›</text>
+      </view>
+    </view>
+
+    <view wx:else class="empty-state">
+      <view class="empty-mark">☆</view>
+      <view class="empty-title">还没有收藏动作</view>
+      <view class="empty-copy">打开动作详情，收藏常练动作</view>
+    </view>
+  </view>
+</view>

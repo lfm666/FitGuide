@@ -6,10 +6,6 @@
   "packOptions": {
     "ignore": [
       {
-        "value": "assets",
-        "type": "folder"
-      },
-      {
         "value": "docs",
         "type": "folder"
       },

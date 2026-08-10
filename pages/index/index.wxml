@@ -42,7 +42,7 @@
     </scroll-view>
 
     <view class="result-bar">
-      <text class="result-title">{{activeCategory === '全部' ? '推荐动作' : activeCategory + '动作'}}</text>
+      <text class="result-title">{{activeCategory === '全部' ? '推荐动作' : activeCategory === '收藏' ? '我的收藏' : activeCategory + '动作'}}</text>
       <text class="result-count">{{exercises.length}} 个动作</text>
     </view>
 
@@ -89,10 +89,10 @@
     </view>
 
     <view wx:else class="empty-state">
-      <view class="empty-mark">?</view>
-      <view class="empty-title">没有找到相关动作</view>
-      <view class="empty-copy">换个关键词，或者清空当前筛选</view>
-      <button class="reset-button" bindtap="clearFilters">清空筛选</button>
+      <view class="empty-mark">{{activeCategory === '收藏' && !query ? '☆' : '?'}}</view>
+      <view class="empty-title">{{activeCategory === '收藏' && !query ? '还没有收藏动作' : '没有找到相关动作'}}</view>
+      <view class="empty-copy">{{activeCategory === '收藏' && !query ? '打开动作详情，收藏常练动作' : '换个关键词，或者清空当前筛选'}}</view>
+      <button class="reset-button" bindtap="clearFilters">{{activeCategory === '收藏' && !query ? '查看全部动作' : '清空筛选'}}</button>
     </view>
 
     <view class="disclaimer">{{disclaimer}}</view>

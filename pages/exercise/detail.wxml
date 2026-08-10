@@ -1,6 +1,13 @@
 <view wx:if="{{exercise}}" class="page safe-bottom">
   <view class="intro">
-    <view class="title">{{exercise.name}}</view>
+    <view class="title-row">
+      <view class="title">{{exercise.name}}</view>
+      <button
+        class="favorite-button {{isFavorite ? 'is-active' : ''}}"
+        bindtap="toggleFavorite"
+        aria-label="{{isFavorite ? '取消收藏' : '收藏'}}{{exercise.name}}"
+      >{{isFavorite ? '★ 已收藏' : '☆ 收藏'}}</button>
+    </view>
     <view class="tag-row">
       <text class="tag tag-primary">{{exercise.category}}</text>
       <text class="tag tag-level">{{exercise.level}}</text>

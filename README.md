@@ -13,6 +13,7 @@
 
 ```powershell
 node tests/exercises.test.js
+node scripts/test-favorites.js
 ```
 
 发布前检查全部远程图片和 GIF：

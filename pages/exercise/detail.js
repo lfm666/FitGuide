@@ -1,5 +1,6 @@
 const { exercises, disclaimer } = require('../../data/exercises')
 const { findExerciseById } = require('../../utils/exercises')
+const { getFavoriteIds, toggleFavorite: toggleStoredFavorite } = require('../../utils/favorites')
 
 Page({
   data: {
@@ -8,6 +9,7 @@ Page({
     gifSrc: '',
     gifLoaded: false,
     gifFailed: false,
+    isFavorite: false,
     notFound: false
   },
 
@@ -18,8 +20,22 @@ Page({
       return
     }
 
-    this.setData({ exercise, gifSrc: exercise.gif })
+    this.setData({
+      exercise,
+      gifSrc: exercise.gif,
+      isFavorite: getFavoriteIds().includes(exercise.id)
+    })
     wx.setNavigationBarTitle({ title: exercise.name })
+  },
+
+  toggleFavorite() {
+    try {
+      const isFavorite = toggleStoredFavorite(this.data.exercise.id)
+      this.setData({ isFavorite })
+      wx.showToast({ title: isFavorite ? '已收藏' : '已取消收藏', icon: 'none' })
+    } catch (error) {
+      wx.showToast({ title: '收藏失败，请重试', icon: 'none' })
+    }
   },
 
   onGifLoad() {

@@ -7,11 +7,37 @@
   padding: 28rpx 32rpx 24rpx;
 }
 
+.title-row {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
 .title {
+  flex: 1;
   font-size: 50rpx;
   font-weight: 800;
   line-height: 1.25;
   letter-spacing: -1rpx;
+}
+
+.favorite-button {
+  flex: 0 0 auto;
+  height: 88rpx;
+  margin: 0;
+  padding: 0 24rpx;
+  border: 2rpx solid #cbd5d1;
+  border-radius: 44rpx;
+  color: #596561;
+  background: #fff;
+  font-size: 24rpx;
+  line-height: 84rpx;
+}
+
+.favorite-button.is-active {
+  border-color: #123b31;
+  color: #fff;
+  background: #123b31;
 }
 
 .tag-row {

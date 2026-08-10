@@ -1,13 +1,15 @@
 const { exercises, disclaimer } = require('../../data/exercises')
 const { categoryOrder, filterExercises } = require('../../utils/exercises')
+const { getFavoriteIds } = require('../../utils/favorites')
 const exerciseCards = exercises.map((exercise) => ({
   ...exercise,
   primaryMusclesText: exercise.primaryMuscles.join(' · ')
 }))
+const categories = [categoryOrder[0], '收藏', ...categoryOrder.slice(1)]
 
 Page({
   data: {
-    categories: categoryOrder,
+    categories,
     exercises: exerciseCards,
     query: '',
     activeCategory: '全部',
@@ -22,11 +24,20 @@ Page({
     this.applyFilters(this.data.query, event.currentTarget.dataset.category)
   },
 
+  onShow() {
+    this.applyFilters(this.data.query, this.data.activeCategory)
+  },
+
   applyFilters(query, category) {
+    const filtered = filterExercises(exerciseCards, query, category === '收藏' ? '全部' : category)
+    const favoriteIds = category === '收藏' ? getFavoriteIds() : []
+
     this.setData({
       query,
       activeCategory: category,
-      exercises: filterExercises(exerciseCards, query, category)
+      exercises: category === '收藏'
+        ? filtered.filter(({ id }) => favoriteIds.includes(id))
+        : filtered
     })
   },
 

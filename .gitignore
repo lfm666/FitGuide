@@ -27,4 +27,6 @@ Thumbs.db
 
 tests/
 
-docs/
+docs/*
+!docs/screenshots/
+!docs/screenshots/*.jpg

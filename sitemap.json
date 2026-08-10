@@ -1,0 +1,9 @@
+{
+  "desc": "FitGuide 页面索引配置",
+  "rules": [
+    {
+      "action": "allow",
+      "page": "*"
+    }
+  ]
+}

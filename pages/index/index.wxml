@@ -1,0 +1,86 @@
+<view class="page safe-bottom">
+  <view class="hero">
+    <view class="eyebrow">FITGUIDE</view>
+    <view class="title">今天练哪里？</view>
+    <view class="subtitle">找到器械，跟着动作演示安全训练</view>
+  </view>
+
+  <view class="search-box">
+    <text class="search-icon" aria-hidden="true">⌕</text>
+    <input
+      class="search-input"
+      value="{{query}}"
+      placeholder="搜索动作、器械或肌群"
+      placeholder-class="search-placeholder"
+      confirm-type="search"
+      bindinput="onSearchInput"
+      aria-label="搜索动作、器械或肌群"
+    />
+  </view>
+
+  <scroll-view class="categories" scroll-x enhanced show-scrollbar="{{false}}">
+    <view class="category-row">
+      <button
+        wx:for="{{categories}}"
+        wx:key="*this"
+        class="category-button {{activeCategory === item ? 'is-active' : ''}}"
+        data-category="{{item}}"
+        bindtap="onCategoryTap"
+        aria-label="筛选{{item}}动作"
+      >{{item}}</button>
+    </view>
+  </scroll-view>
+
+  <view class="result-bar">
+    <text class="result-title">{{activeCategory === '全部' ? '全部动作' : activeCategory}}</text>
+    <text class="result-count">{{exercises.length}} 个动作</text>
+  </view>
+
+  <view wx:if="{{exercises.length}}" class="exercise-grid">
+    <view
+      wx:for="{{exercises}}"
+      wx:key="id"
+      wx:for-index="index"
+      class="exercise-card"
+      hover-class="card-pressed"
+      data-id="{{item.id}}"
+      bindtap="openExercise"
+      role="button"
+      aria-label="查看{{item.name}}动作详情"
+    >
+      <view class="cover-wrap">
+        <image
+          wx:if="{{!item.imageFailed}}"
+          class="cover"
+          src="{{item.image}}"
+          mode="aspectFill"
+          lazy-load
+          data-index="{{index}}"
+          binderror="onImageError"
+        />
+        <view wx:else class="cover-fallback">
+          <text class="fallback-mark">FG</text>
+          <text class="fallback-name">{{item.name}}</text>
+        </view>
+        <text class="level-tag">{{item.level}}</text>
+      </view>
+      <view class="card-content">
+        <view class="exercise-name">{{item.name}}</view>
+        <view class="equipment">{{item.equipment}}</view>
+        <view class="muscle-row">
+          <text class="category-dot"></text>
+          <text>{{item.primaryMusclesText}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view wx:else class="empty-state">
+    <view class="empty-mark">?</view>
+    <view class="empty-title">没有找到相关动作</view>
+    <view class="empty-copy">换个关键词，或者清空当前筛选</view>
+    <button class="reset-button" bindtap="clearFilters">清空筛选</button>
+  </view>
+
+  <view class="disclaimer">{{disclaimer}}</view>
+</view>

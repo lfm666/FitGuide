@@ -1,0 +1,81 @@
+<view wx:if="{{exercise}}" class="page safe-bottom">
+  <view class="media-wrap">
+    <image class="media poster" src="{{exercise.image}}" mode="aspectFit" />
+    <image
+      hidden="{{gifFailed}}"
+      class="media gif {{gifLoaded ? 'is-visible' : ''}}"
+      src="{{gifSrc}}"
+      mode="aspectFit"
+      bindload="onGifLoad"
+      binderror="onGifError"
+    />
+    <view wx:if="{{!gifLoaded && !gifFailed}}" class="media-status">
+      <view class="loading-dot"></view>
+      <text>动作演示加载中</text>
+    </view>
+    <view wx:if="{{gifFailed}}" class="media-error">
+      <text>动图加载失败，已显示静态图</text>
+      <button class="retry-button" bindtap="retryGif">重新加载</button>
+    </view>
+  </view>
+
+  <view class="content">
+    <view class="tag-row">
+      <text class="tag tag-primary">{{exercise.category}}</text>
+      <text class="tag">{{exercise.level}}</text>
+    </view>
+    <view class="title">{{exercise.name}}</view>
+    <view class="equipment">使用器械：{{exercise.equipment}}</view>
+
+    <view class="muscle-card">
+      <view class="muscle-item">
+        <view class="muscle-label">主要肌群</view>
+        <view class="muscle-values">
+          <text wx:for="{{exercise.primaryMuscles}}" wx:key="*this" class="muscle-pill">{{item}}</text>
+        </view>
+      </view>
+      <view wx:if="{{exercise.secondaryMuscles.length}}" class="muscle-item muscle-secondary">
+        <view class="muscle-label">次要肌群</view>
+        <view class="muscle-values">
+          <text wx:for="{{exercise.secondaryMuscles}}" wx:key="*this" class="muscle-pill muscle-pill-light">{{item}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="section">
+      <view class="section-heading">
+        <text class="section-number">01</text>
+        <text class="section-title">动作步骤</text>
+      </view>
+      <view wx:for="{{exercise.steps}}" wx:key="*this" class="step">
+        <view class="step-index">{{index + 1}}</view>
+        <view class="step-text">{{item}}</view>
+      </view>
+    </view>
+
+    <view class="section">
+      <view class="section-heading">
+        <text class="section-number warning-number">02</text>
+        <text class="section-title">注意事项</text>
+      </view>
+      <view class="caution-card">
+        <view wx:for="{{exercise.cautions}}" wx:key="*this" class="caution-item">
+          <text class="caution-icon">!</text>
+          <text class="caution-text">{{item}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="disclaimer">
+      <view class="disclaimer-title">安全提示</view>
+      <view>{{disclaimer}}</view>
+    </view>
+  </view>
+</view>
+
+<view wx:elif="{{notFound}}" class="not-found safe-bottom">
+  <view class="not-found-code">404</view>
+  <view class="not-found-title">没有找到这个动作</view>
+  <view class="not-found-copy">动作可能已被移除，或者链接不完整。</view>
+  <button class="home-button" bindtap="goHome">返回动作首页</button>
+</view>

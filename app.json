@@ -1,0 +1,15 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/exercise/detail"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#f5f7f8",
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "FitGuide",
+    "backgroundColor": "#f5f7f8",
+    "backgroundTextStyle": "dark"
+  },
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

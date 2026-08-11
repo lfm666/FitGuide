@@ -59,7 +59,16 @@
       <text class="result-count">{{exercises.length}} 个动作</text>
     </view>
 
-    <view wx:if="{{exercises.length}}" class="exercise-list">
+    <view wx:if="{{!mediaReady}}" class="empty-state">
+      <view class="empty-title">动作库加载中</view>
+    </view>
+
+    <view wx:elif="{{mediaFailed}}" class="empty-state">
+      <view class="empty-title">动作图片加载失败</view>
+      <view class="empty-copy">请重新进入小程序后重试</view>
+    </view>
+
+    <view wx:elif="{{exercises.length}}" class="exercise-list">
       <view
         wx:for="{{exercises}}"
         wx:key="id"

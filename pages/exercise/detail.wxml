@@ -14,7 +14,7 @@
     </view>
   </view>
 
-  <view class="media-wrap">
+  <view wx:if="{{!mediaFailed}}" class="media-wrap">
     <image class="media poster" src="{{exercise.image}}" mode="aspectFit" />
     <image
       hidden="{{gifFailed}}"
@@ -32,6 +32,10 @@
       <text>动图加载失败，已显示静态图</text>
       <button class="retry-button" bindtap="retryGif">重新加载</button>
     </view>
+  </view>
+
+  <view wx:if="{{mediaFailed}}" class="media-error">
+    <text>动作媒体加载失败，请返回后重试</text>
   </view>
 
   <view class="content">

@@ -1,5 +1,6 @@
 const { exercises, disclaimer } = require('../../data/exercises')
 const { categoryOrder, filterExercises } = require('../../utils/exercises')
+const { resolveMedia } = require('../../utils/media')
 const exerciseCards = exercises.map((exercise) => ({
   ...exercise,
   primaryMusclesText: exercise.primaryMuscles.join(' · ')
@@ -10,11 +11,24 @@ Page({
   data: {
     categories: categoryOrder,
     equipments,
-    exercises: exerciseCards,
+    exercises: [],
     query: '',
     activeCategory: '全部',
     activeEquipment: '全部器械',
-    disclaimer
+    disclaimer,
+    mediaReady: false,
+    mediaFailed: false
+  },
+
+  async onLoad() {
+    try {
+      this.mediaExerciseCards = await resolveMedia(exerciseCards)
+      this.setData({ mediaReady: true })
+      this.applyFilters(this.data.query, this.data.activeCategory, this.data.activeEquipment)
+    } catch (error) {
+      console.error('动作图片加载失败', error)
+      this.setData({ mediaReady: true, mediaFailed: true })
+    }
   },
 
   onSearchInput(event) {
@@ -30,7 +44,9 @@ Page({
   },
 
   onShow() {
-    this.applyFilters(this.data.query, this.data.activeCategory, this.data.activeEquipment)
+    if (this.mediaExerciseCards) {
+      this.applyFilters(this.data.query, this.data.activeCategory, this.data.activeEquipment)
+    }
   },
 
   applyFilters(query, category, equipment = '全部器械') {
@@ -38,7 +54,7 @@ Page({
       query,
       activeCategory: category,
       activeEquipment: equipment,
-      exercises: filterExercises(exerciseCards, query, category, equipment)
+      exercises: filterExercises(this.mediaExerciseCards || [], query, category, equipment)
     })
   },
 

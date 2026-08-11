@@ -3,7 +3,12 @@ const assert = require('node:assert/strict')
 let stored
 global.wx = {
   getStorageSync: () => stored,
-  setStorageSync: (key, value) => { stored = value }
+  setStorageSync: (key, value) => { stored = value },
+  cloud: {
+    getTempFileURL: async ({ fileList }) => ({
+      fileList: fileList.map((fileID) => ({ fileID, tempFileURL: `https://test.local/${fileID}` }))
+    })
+  }
 }
 
 const { getFavoriteIds, toggleFavorite } = require('../utils/favorites')
@@ -26,7 +31,10 @@ const context = {
   data: {},
   setData(value) { Object.assign(this.data, value) }
 }
-page.onShow.call(context)
-assert.deepEqual(context.data.exercises.map(({ id }) => id), stored)
-
-console.log('本地收藏检查通过')
+page.onShow.call(context).then(() => {
+  assert.deepEqual(context.data.exercises.map(({ id }) => id), stored)
+  console.log('本地收藏检查通过')
+}).catch((error) => {
+  console.error(error)
+  process.exitCode = 1
+})

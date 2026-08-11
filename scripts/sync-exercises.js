@@ -18,6 +18,9 @@ const required = [
   'steps',
   'cautions'
 ]
+const isMediaAddress = (value) => (
+  typeof value === 'string' && (value.startsWith('cloud://') || /^https?:\/\//i.test(value))
+)
 
 if (!Array.isArray(data.exercises) || !data.exercises.length) {
   throw new Error('exercises.json 中没有动作数据')
@@ -28,8 +31,8 @@ for (const [index, exercise] of data.exercises.entries()) {
   const missing = required.filter((key) => exercise[key] === undefined || exercise[key] === '')
   if (missing.length) throw new Error(`第 ${index + 1} 个动作缺少字段：${missing.join(', ')}`)
   if (ids.has(exercise.id)) throw new Error(`动作 id 重复：${exercise.id}`)
-  if (!exercise.image.startsWith('https://') || !exercise.gif.startsWith('https://')) {
-    throw new Error(`动作媒体地址必须使用 HTTPS：${exercise.id}`)
+  if (!isMediaAddress(exercise.image) || !isMediaAddress(exercise.gif)) {
+    throw new Error(`动作媒体必须使用 HTTP(S) 地址或 CloudBase fileID：${exercise.id}`)
   }
   ids.add(exercise.id)
 }

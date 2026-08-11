@@ -1,5 +1,6 @@
 # WeChat Mini Program
 project.private.config.json
+project.config.json
 miniprogram_npm/
 
 # Dependencies and build output

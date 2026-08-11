@@ -1,6 +1,7 @@
 const { exercises, disclaimer } = require('../../data/exercises')
 const { findExerciseById } = require('../../utils/exercises')
 const { getFavoriteIds, toggleFavorite: toggleStoredFavorite } = require('../../utils/favorites')
+const { resolveMedia } = require('../../utils/media')
 
 Page({
   data: {
@@ -9,23 +10,31 @@ Page({
     gifSrc: '',
     gifLoaded: false,
     gifFailed: false,
+    mediaFailed: false,
     isFavorite: false,
     notFound: false
   },
 
-  onLoad(options) {
+  async onLoad(options) {
     const exercise = findExerciseById(exercises, options.id)
     if (!exercise) {
       this.setData({ notFound: true })
       return
     }
 
-    this.setData({
-      exercise,
-      gifSrc: exercise.gif,
-      isFavorite: getFavoriteIds().includes(exercise.id)
-    })
+    this.setData({ isFavorite: getFavoriteIds().includes(exercise.id) })
     wx.setNavigationBarTitle({ title: exercise.name })
+
+    try {
+      const [resolvedExercise] = await resolveMedia([exercise], ['image', 'gif'])
+      this.setData({
+        exercise: resolvedExercise,
+        gifSrc: resolvedExercise.gif
+      })
+    } catch (error) {
+      console.error('动作媒体加载失败', error)
+      this.setData({ mediaFailed: true })
+    }
   },
 
   toggleFavorite() {
@@ -46,14 +55,19 @@ Page({
     this.setData({ gifLoaded: false, gifFailed: true })
   },
 
-  retryGif() {
-    const { gif } = this.data.exercise
-    const separator = gif.includes('?') ? '&' : '?'
-    this.setData({
-      gifSrc: `${gif}${separator}retry=${Date.now()}`,
-      gifLoaded: false,
-      gifFailed: false
-    })
+  async retryGif() {
+    const source = findExerciseById(exercises, this.data.exercise.id)
+    try {
+      const [resolvedExercise] = await resolveMedia([source], ['gif'])
+      this.setData({
+        gifSrc: `${resolvedExercise.gif}${resolvedExercise.gif.includes('?') ? '&' : '?'}retry=${Date.now()}`,
+        gifLoaded: false,
+        gifFailed: false
+      })
+    } catch (error) {
+      console.error('动作 GIF 重试失败', error)
+      this.setData({ gifLoaded: false, gifFailed: true })
+    }
   },
 
   goHome() {

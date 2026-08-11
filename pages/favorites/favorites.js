@@ -1,5 +1,6 @@
 const { exercises } = require('../../data/exercises')
 const { getFavoriteIds } = require('../../utils/favorites')
+const { resolveMedia } = require('../../utils/media')
 const exerciseCards = exercises.map((exercise) => ({
   ...exercise,
   primaryMusclesText: exercise.primaryMuscles.join(' · ')
@@ -7,12 +8,25 @@ const exerciseCards = exercises.map((exercise) => ({
 
 Page({
   data: {
-    exercises: []
+    exercises: [],
+    mediaReady: false,
+    mediaFailed: false
   },
 
-  onShow() {
+  async onShow() {
     const favoriteIds = getFavoriteIds()
-    this.setData({ exercises: exerciseCards.filter(({ id }) => favoriteIds.includes(id)) })
+    const favoriteCards = exerciseCards.filter(({ id }) => favoriteIds.includes(id))
+    this.setData({ exercises: [], mediaReady: false, mediaFailed: false })
+
+    try {
+      this.setData({
+        exercises: await resolveMedia(favoriteCards),
+        mediaReady: true
+      })
+    } catch (error) {
+      console.error('收藏动作图片加载失败', error)
+      this.setData({ mediaReady: true, mediaFailed: true })
+    }
   },
 
   openExercise(event) {

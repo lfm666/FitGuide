@@ -26,8 +26,8 @@ FitGuide 是一款使用微信原生技术开发的健身动作指南小程序�
     <th align="center">我的收藏</th>
   </tr>
   <tr>
-    <td><img src="./docs/screenshots/action-library.jpg" alt="FitGuide 动作库页面" width="420"></td>
-    <td><img src="./docs/screenshots/favorites.jpg" alt="FitGuide 收藏页面" width="420"></td>
+    <td><img src="screenshots/action-library.jpg" alt="FitGuide 动作库页面" width="420"></td>
+    <td><img src="screenshots/favorites.jpg" alt="FitGuide 收藏页面" width="420"></td>
   </tr>
 </table>
 

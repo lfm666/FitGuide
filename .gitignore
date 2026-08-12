@@ -1,12 +1,14 @@
 # WeChat Mini Program
-project.private.config.json
-project.config.json
-miniprogram_npm/
+/fit-guide-miniprogram/project.private.config.json
+/fit-guide-miniprogram/project.config.json
+/fit-guide-miniprogram/miniprogram_npm/
 
 # Dependencies and build output
 node_modules/
 dist/
 coverage/
+target/
+build/
 
 # Local environment and logs
 .env
@@ -28,6 +30,5 @@ Thumbs.db
 
 tests/
 
-docs/*
-!docs/screenshots/
-!docs/screenshots/*.jpg
+# Local documentation drafts
+/docs/*

@@ -49,14 +49,23 @@ public class CatalogService {
     }
 
     public ExerciseDetailResponse getExercise(String id) {
+        var exercise = getAvailableExercise(id);
+        var catalog = getCatalogMetadata();
+        return new ExerciseDetailResponse(
+                catalog.getVersion(), catalog.getDisclaimer(), toResponse(exercise));
+    }
+
+    public void requireAvailableExercise(String id) {
+        getAvailableExercise(id);
+    }
+
+    private ExerciseEntity getAvailableExercise(String id) {
         validateExerciseId(id);
         var exercise = exerciseMapper.selectById(id);
         if (exercise == null || !Boolean.TRUE.equals(exercise.getEnabled())) {
             throw CatalogApiException.exerciseNotFound();
         }
-        var catalog = getCatalogMetadata();
-        return new ExerciseDetailResponse(
-                catalog.getVersion(), catalog.getDisclaimer(), toResponse(exercise));
+        return exercise;
     }
 
     private CatalogEntity getCatalogMetadata() {
@@ -67,7 +76,7 @@ public class CatalogService {
         return catalog;
     }
 
-    private static void validateExerciseId(String id) {
+    public void validateExerciseId(String id) {
         if (id == null || id.length() > 64 || !EXERCISE_ID.matcher(id).matches()) {
             throw CatalogApiException.invalidExerciseId();
         }

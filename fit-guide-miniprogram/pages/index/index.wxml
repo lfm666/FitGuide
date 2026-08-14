@@ -64,8 +64,9 @@
     </view>
 
     <view wx:elif="{{mediaFailed}}" class="empty-state">
-      <view class="empty-title">动作图片加载失败</view>
-      <view class="empty-copy">请重新进入小程序后重试</view>
+      <view class="empty-title">动作库加载失败</view>
+      <view class="empty-copy">请检查网络后重试</view>
+      <button class="reset-button" bindtap="retryLoad">重新加载</button>
     </view>
 
     <view wx:elif="{{exercises.length}}" class="exercise-list">

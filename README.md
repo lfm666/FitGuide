@@ -14,12 +14,12 @@
 
 ## 项目简介
 
-FitGuide 是一款面向健身新手的动作指南。用户可以按训练部位或器械筛选动作，也可以直接搜索动作、器械和肌群；进入详情页后，可查看动作演示、目标肌群、分步说明与安全提示，并将常练动作收藏到本地。
+FitGuide 是一款面向健身新手的动作指南。用户可以按训练部位或器械筛选动作，也可以直接搜索动作、器械和肌群；进入详情页后，可查看动作演示、目标肌群、分步说明与安全提示，并将常练动作同步到云端收藏。
 
-仓库采用前后端同仓结构，包含微信原生小程序和基于 Spring Boot、MySQL 的只读动作目录服务。项目当前收录 **60 个动作**，覆盖 **10 个训练部位**、**48 种器械**；图片与 GIF 使用 CloudBase 云存储或外部 HTTP(S) 地址。
+仓库采用前后端同仓结构，包含微信原生小程序和基于 Spring Boot、MySQL 的动作目录与收藏服务。项目当前收录 **60 个动作**，覆盖 **10 个训练部位**、**48 种器械**；图片与 GIF 使用 CloudBase 云存储或外部 HTTP(S) 地址。
 
 > [!IMPORTANT]
-> 小程序目前仍从本地 JSON 加载动作数据，后端可独立运行并提供同结构的目录 API；小程序尚未切换到网络请求。
+> 小程序通过 `wx.cloud.callContainer` 调用微信云托管后端；收藏接口使用云托管注入的用户 OpenID 隔离数据。
 
 ## 应用截图
 
@@ -44,7 +44,7 @@ FitGuide 是一款面向健身新手的动作指南。用户可以按训练部�
 - **动作详情**：展示动作难度、目标肌群、动作步骤、注意事项和 GIF 演示。
 - **媒体降级**：GIF 按需加载；加载失败时保留静态图，并支持重新加载。
 - **混合媒体地址**：支持 `cloud://` fileID、`https://` 和 `http://` 地址；CloudBase fileID 会在运行时换取临时 HTTPS 链接。
-- **本地收藏**：使用微信本地存储保存常练动作，不要求登录。
+- **云端收藏**：使用微信云托管 OpenID 和 MySQL 保存常练动作，无需额外登录页，并支持跨设备同步。
 - **异常状态**：覆盖无搜索结果、图片加载失败和无效动作链接等场景。
 - **目录 API**：后端提供动作列表筛选、部位/器械列表和动作详情查询。
 
@@ -53,8 +53,8 @@ FitGuide 是一款面向健身新手的动作指南。用户可以按训练部�
 | 模块 | 说明 |
 | --- | --- |
 | 小程序 | 微信原生小程序、WXML、WXSS、JavaScript（CommonJS） |
-| 小程序数据 | 本地 JSON，构建为可直接 `require` 的 JS 模块 |
-| 收藏存储 | `wx.getStorageSync` / `wx.setStorageSync` |
+| 小程序数据 | 通过微信云托管目录 API 加载 |
+| 收藏存储 | MySQL；`wx` 本地存储仅用于一次性旧收藏迁移 |
 | 动作媒体 | CloudBase `cloud://` fileID 或 HTTP(S) 地址；云文件按需换取临时 HTTPS |
 | 云开发初始化 | `app.js` 中调用 `wx.cloud.init`，用于解析 `cloud://` 文件 |
 | 后端 | JDK 21、Spring Boot 3.5、Spring MVC |
@@ -94,13 +94,13 @@ node scripts/sync-exercises.js
 
 ```powershell
 cd fit-guide-backend
-$env:SPRING_DATASOURCE_URL='jdbc:mysql://localhost:3306/fit_guide?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai'
-$env:SPRING_DATASOURCE_USERNAME='root'
-$env:SPRING_DATASOURCE_PASSWORD='your-password'
+$env:MYSQL_ADDRESS='localhost:3306'
+$env:MYSQL_USERNAME='root'
+$env:MYSQL_PASSWORD='your-password'
 mvn spring-boot:run
 ```
 
-服务默认监听 `http://localhost:19000`，提供以下只读接口：
+服务默认监听 `http://localhost:19000`，提供以下接口：
 
 | 接口 | 说明 |
 | --- | --- |
@@ -108,9 +108,12 @@ mvn spring-boot:run
 | `GET /api/v1/catalog/categories` | 获取训练部位列表 |
 | `GET /api/v1/catalog/equipments` | 获取器械列表 |
 | `GET /api/v1/exercises/{id}` | 获取动作详情 |
+| `GET /api/v1/favorites` | 获取当前用户收藏的动作 ID |
+| `PUT /api/v1/favorites/{id}` | 收藏动作 |
+| `DELETE /api/v1/favorites/{id}` | 取消收藏 |
 | `GET /swagger-ui.html` | 查看 Swagger UI |
 
-接口返回统一的 `{ code, message, data }` 结构。更多后端说明见 [`fit-guide-backend/README.md`](fit-guide-backend/README.md) 和 [`fit-guide-backend/docs/backend-design.md`](fit-guide-backend/docs/backend-design.md)。
+接口返回统一的 `{ code, message, data }` 结构。收藏接口依赖微信云托管注入的 `X-WX-OPENID`。更多后端说明见 [`fit-guide-backend/README.md`](fit-guide-backend/README.md)、[`fit-guide-backend/docs/backend-design.md`](fit-guide-backend/docs/backend-design.md) 和 [`fit-guide-backend/docs/favorites-api-design.md`](fit-guide-backend/docs/favorites-api-design.md)。
 
 ### 远程媒体配置
 
@@ -170,8 +173,11 @@ node scripts/sync-exercises.js
 # 进入小程序目录
 cd fit-guide-miniprogram
 
-# 检查本地收藏逻辑
+# 检查后端收藏调用、旧数据迁移和页面状态
 node scripts/test-favorites.js
+
+# 检查云托管接口封装
+node scripts/test-api.js
 
 # 检查媒体地址格式
 node scripts/check-media.js

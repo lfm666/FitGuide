@@ -4,6 +4,9 @@
 > 技术约束：Spring Boot 3、JDK 21、MySQL 5.7.18  
 > 数据依据：`fit-guide-miniprogram/data/exercises.json`（version 1，共 60 条动作）
 
+> [!NOTE]
+> 本文保留目录服务首版基线；后续云端收藏扩展见 [`favorites-api-design.md`](favorites-api-design.md)。
+
 ## 1. 设计结论
 
 首版建设一个只读的单体 REST 服务，负责从 MySQL 读取动作目录和动作详情。小程序现有的搜索、筛选、收藏和 CloudBase 媒体解析逻辑暂不迁移，避免一次改动多个边界。
@@ -182,9 +185,9 @@ spring:
   application:
     name: fit-guide-backend
   datasource:
-    url: ${FIT_GUIDE_DB_URL}
-    username: ${FIT_GUIDE_DB_USERNAME}
-    password: ${FIT_GUIDE_DB_PASSWORD}
+    url: jdbc:mysql://${MYSQL_ADDRESS}/fit_guide
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
 mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true

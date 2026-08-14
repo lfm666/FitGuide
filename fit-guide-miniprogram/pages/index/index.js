@@ -1,34 +1,53 @@
-const { exercises, disclaimer } = require('../../data/exercises')
-const { categoryOrder, filterExercises } = require('../../utils/exercises')
+const { getCatalog, getCategories, getEquipments } = require('../../utils/api')
+const { filterExercises } = require('../../utils/exercises')
 const { resolveMedia } = require('../../utils/media')
-const exerciseCards = exercises.map((exercise) => ({
-  ...exercise,
-  primaryMusclesText: exercise.primaryMuscles.join(' · ')
-}))
-const equipments = ['全部器械', ...new Set(exercises.map(({ equipment }) => equipment))]
 
 Page({
   data: {
-    categories: categoryOrder,
-    equipments,
+    categories: ['全部'],
+    equipments: ['全部器械'],
     exercises: [],
     query: '',
     activeCategory: '全部',
     activeEquipment: '全部器械',
-    disclaimer,
+    disclaimer: '',
     mediaReady: false,
     mediaFailed: false
   },
 
   async onLoad() {
+    await this.loadCatalog()
+  },
+
+  async loadCatalog() {
+    this.setData({ mediaReady: false, mediaFailed: false })
+
     try {
+      const [catalog, categories, equipments] = await Promise.all([
+        getCatalog(),
+        getCategories(),
+        getEquipments()
+      ])
+      const exerciseCards = catalog.exercises.map((exercise) => ({
+        ...exercise,
+        primaryMusclesText: exercise.primaryMuscles.join(' · ')
+      }))
       this.mediaExerciseCards = await resolveMedia(exerciseCards)
-      this.setData({ mediaReady: true })
+      this.setData({
+        categories: ['全部', ...categories],
+        equipments: ['全部器械', ...equipments],
+        disclaimer: catalog.disclaimer,
+        mediaReady: true
+      })
       this.applyFilters(this.data.query, this.data.activeCategory, this.data.activeEquipment)
     } catch (error) {
-      console.error('动作图片加载失败', error)
+      console.error('动作库加载失败', error)
       this.setData({ mediaReady: true, mediaFailed: true })
     }
+  },
+
+  retryLoad() {
+    this.loadCatalog()
   },
 
   onSearchInput(event) {

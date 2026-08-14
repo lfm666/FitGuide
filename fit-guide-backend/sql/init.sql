@@ -43,6 +43,22 @@ CREATE TABLE fit_exercise (
   COLLATE = utf8mb4_general_ci
   COMMENT = 'FitGuide健身动作表';
 
+CREATE TABLE fit_user_favorite (
+    user_openid  VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL
+                 COMMENT '微信小程序用户OpenID',
+    exercise_id  VARCHAR(64) NOT NULL COMMENT '动作ID',
+    created_at   DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3)
+                 COMMENT '收藏时间',
+    PRIMARY KEY (user_openid, exercise_id),
+    KEY idx_fit_user_favorite_list (user_openid, created_at, exercise_id),
+    CONSTRAINT fk_fit_user_favorite_exercise
+        FOREIGN KEY (exercise_id) REFERENCES fit_exercise (id)
+        ON UPDATE RESTRICT ON DELETE RESTRICT
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci
+  COMMENT = '用户动作收藏关系表';
+
 
 INSERT INTO fit_catalog (id, version, disclaimer)
 VALUES (1, 1, '内容仅供一般健身动作参考；首次使用器械时请让教练确认座椅、限位和重量设置。');
@@ -122,4 +138,3 @@ INSERT INTO fit_exercise (
     ('cable-woodchop', '绳索伐木', '核心', '龙门架', '中级', '["腹外斜肌","腹内斜肌"]', '["腹直肌","腹横肌"]', 'https://7072-prod-d4gi5hg2s057d6cfc-1466119943.tcb.qcloud.la/exercises/cable-woodchop/cable-woodchop.jpg', 'https://7072-prod-d4gi5hg2s057d6cfc-1466119943.tcb.qcloud.la/exercises/cable-woodchop/cable-woodchop.gif', '["侧对高位滑轮站立，双手握柄并置于靠近滑轮的肩侧。","转动躯干和脚掌，将手柄斜向拉至对侧髋部。","保持核心受控，沿原路线回到高位后换边。"]', '["不要只靠手臂拉动重量。","膝盖与脚尖随转体自然转动。"]', 58, 1),
     ('hanging-knee-raise', '悬垂举膝', '核心', '单杠或罗马椅', '中级', '["腹直肌"]', '["髂腰肌","腹斜肌"]', 'https://7072-prod-d4gi5hg2s057d6cfc-1466119943.tcb.qcloud.la/exercises/hanging-knee-raise/hanging-knee-raise.jpg', 'https://7072-prod-d4gi5hg2s057d6cfc-1466119943.tcb.qcloud.la/exercises/hanging-knee-raise/hanging-knee-raise.gif', '["双手握住单杠稳定悬垂，双腿自然并拢。","收紧腹部并卷动骨盆，将双膝平稳抬向胸部。","控制双腿回到垂直位置，身体停止摆动后重复。"]', '["不要通过前后摆动甩起双腿。","握力或肩部不稳时使用罗马椅版本。"]', 59, 1),
     ('dead-hang', '单杠悬垂', '核心', '单杠', '初级', '["前臂屈肌群"]', '["背阔肌","肩袖肌群"]', 'https://7072-prod-d4gi5hg2s057d6cfc-1466119943.tcb.qcloud.la/exercises/dead-hang/dead-hang.jpg', 'https://7072-prod-d4gi5hg2s057d6cfc-1466119943.tcb.qcloud.la/exercises/dead-hang/dead-hang.gif', '["双手与肩同宽握住单杠，双脚离地并保持身体垂直。","手臂自然伸直，让肩胛在可控范围内上提并保持呼吸。","达到目标时间后先踩回支撑物，再松开双手。"]', '["肩部疼痛或不稳时不要完全放松悬垂。","不要在握力耗尽后直接跳落。"]', 60, 1);
-

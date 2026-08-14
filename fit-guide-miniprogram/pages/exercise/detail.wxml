@@ -5,6 +5,8 @@
       <button
         class="favorite-button {{isFavorite ? 'is-active' : ''}}"
         bindtap="toggleFavorite"
+        loading="{{favoritePending}}"
+        disabled="{{favoritePending}}"
         aria-label="{{isFavorite ? '取消收藏' : '收藏'}}{{exercise.name}}"
       >{{isFavorite ? '★ 已收藏' : '☆ 收藏'}}</button>
     </view>
@@ -14,7 +16,7 @@
     </view>
   </view>
 
-  <view wx:if="{{!mediaFailed}}" class="media-wrap">
+  <view class="media-wrap">
     <image class="media poster" src="{{exercise.image}}" mode="aspectFit" />
     <image
       hidden="{{gifFailed}}"
@@ -32,10 +34,6 @@
       <text>动图加载失败，已显示静态图</text>
       <button class="retry-button" bindtap="retryGif">重新加载</button>
     </view>
-  </view>
-
-  <view wx:if="{{mediaFailed}}" class="media-error">
-    <text>动作媒体加载失败，请返回后重试</text>
   </view>
 
   <view class="content">
@@ -94,4 +92,14 @@
   <view class="not-found-title">没有找到这个动作</view>
   <view class="not-found-copy">动作可能已被移除，或者链接不完整。</view>
   <button class="home-button" bindtap="goHome">返回动作首页</button>
+</view>
+
+<view wx:elif="{{loading}}" class="not-found safe-bottom">
+  <view class="not-found-title">动作详情加载中</view>
+</view>
+
+<view wx:elif="{{loadFailed}}" class="not-found safe-bottom">
+  <view class="not-found-title">动作详情加载失败</view>
+  <view class="not-found-copy">请检查网络后重试。</view>
+  <button class="home-button" bindtap="retryLoad">重新加载</button>
 </view>

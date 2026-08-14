@@ -17,7 +17,7 @@ mybatis-plus:
     banner: false
 
 springdoc:
-  packages-to-scan: com.fitguide.catalog
+  packages-to-scan: com.fitguide
   paths-to-match: /api/**
   swagger-ui:
     path: /swagger-ui.html

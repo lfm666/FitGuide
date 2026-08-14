@@ -1,0 +1,23 @@
+server:
+  port: 19000
+spring:
+  application:
+    name: fit-guide-backend
+  datasource:
+    url: jdbc:mysql://${MYSQL_ADDRESS}/fit_guide?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&allowMultiQueries=true&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Asia/Shanghai
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
+  jackson:
+    time-zone: Asia/Shanghai
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+  global-config:
+    banner: false
+
+springdoc:
+  packages-to-scan: com.fitguide.catalog
+  paths-to-match: /api/**
+  swagger-ui:
+    path: /swagger-ui.html

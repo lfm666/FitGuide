@@ -1,7 +1,6 @@
 const ENV_ID = 'prod-d4gi5hg2s057d6cfc'
 const SERVICE_NAME = 'springboot-7pqe'
-
-let catalogPromise
+const catalog = require('../data/exercises')
 
 function initCloud() {
   wx.cloud.init({ env: ENV_ID })
@@ -26,41 +25,26 @@ async function request(path, method = 'GET') {
 }
 
 function getCatalog() {
-  if (!catalogPromise) {
-    catalogPromise = request('/api/v1/catalog')
-      .then((catalog) => {
-        if (!catalog || !Array.isArray(catalog.exercises)) throw new Error('动作目录数据格式错误')
-        return catalog
-      })
-      .catch((error) => {
-        catalogPromise = null
-        throw error
-      })
-  }
-
-  return catalogPromise
-}
-
-async function getOptions(path) {
-  const options = await request(path)
-  if (!Array.isArray(options) || options.some((option) => typeof option !== 'string' || !option)) {
-    throw new Error('筛选选项数据格式错误')
-  }
-  return options
+  return catalog
 }
 
 function getCategories() {
-  return getOptions('/api/v1/catalog/categories')
+  return [...new Set(catalog.exercises.map(({ category }) => category))]
 }
 
 function getEquipments() {
-  return getOptions('/api/v1/catalog/equipments')
+  return [...new Set(catalog.exercises.map(({ equipment }) => equipment))]
 }
 
-async function getExercise(id) {
-  const detail = await request(`/api/v1/exercises/${encodeExerciseId(id)}`)
-  if (!detail || !detail.exercise) throw new Error('动作详情数据格式错误')
-  return detail
+function getExercise(id) {
+  encodeExerciseId(id)
+  const exercise = catalog.exercises.find((item) => item.id === id)
+  if (!exercise) {
+    const error = new Error('动作不存在')
+    error.code = 'EXERCISE_NOT_FOUND'
+    throw error
+  }
+  return { version: catalog.version, disclaimer: catalog.disclaimer, exercise }
 }
 
 function getFavoriteIds() {

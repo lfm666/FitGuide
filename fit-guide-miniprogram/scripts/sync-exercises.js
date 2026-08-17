@@ -10,13 +10,11 @@ const required = [
   'name',
   'category',
   'equipment',
-  'level',
   'primaryMuscles',
   'secondaryMuscles',
   'image',
   'gif',
-  'steps',
-  'cautions'
+  'steps'
 ]
 const isMediaAddress = (value) => (
   typeof value === 'string' && (value.startsWith('cloud://') || /^https?:\/\//i.test(value))

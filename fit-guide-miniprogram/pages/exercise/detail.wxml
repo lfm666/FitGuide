@@ -67,19 +67,6 @@
       </view>
     </view>
 
-    <view class="section">
-      <view class="section-heading">
-        <text class="section-title">注意事项</text>
-        <text class="section-number warning-number">SAFE 02</text>
-      </view>
-      <view class="caution-card">
-        <view wx:for="{{exercise.cautions}}" wx:key="*this" class="caution-item">
-          <text class="caution-icon">!</text>
-          <text class="caution-text">{{item}}</text>
-        </view>
-      </view>
-    </view>
-
     <view class="disclaimer">
       <view class="disclaimer-title">安全提示</view>
       <view>{{disclaimer}}</view>

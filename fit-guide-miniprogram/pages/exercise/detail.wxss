@@ -65,8 +65,9 @@
 
 .media-wrap {
   position: relative;
-  height: 520rpx;
-  margin: 0 24rpx;
+  width: 702rpx;
+  height: 702rpx;
+  margin: 0 auto;
   overflow: hidden;
   border-radius: 30rpx;
   background: #18211f;
@@ -229,10 +230,6 @@
   letter-spacing: 2rpx;
 }
 
-.warning-number {
-  color: #a26615;
-}
-
 .step {
   display: flex;
   align-items: flex-start;
@@ -264,46 +261,6 @@
   padding-top: 3rpx;
   font-size: 28rpx;
   line-height: 1.7;
-}
-
-.caution-card {
-  padding: 8rpx 24rpx;
-  border: 2rpx solid #efcb8b;
-  border-radius: 24rpx;
-  background: #fff5df;
-}
-
-.caution-item {
-  display: flex;
-  align-items: flex-start;
-  padding: 20rpx 0;
-  border-bottom: 2rpx solid rgba(162, 102, 21, 0.14);
-}
-
-.caution-item:last-child {
-  border-bottom: 0;
-}
-
-.caution-icon {
-  display: flex;
-  flex: 0 0 38rpx;
-  align-items: center;
-  justify-content: center;
-  width: 38rpx;
-  height: 38rpx;
-  margin: 4rpx 16rpx 0 0;
-  border-radius: 50%;
-  color: #fff;
-  background: #a26615;
-  font-size: 22rpx;
-  font-weight: 800;
-}
-
-.caution-text {
-  flex: 1;
-  color: #744911;
-  font-size: 27rpx;
-  line-height: 1.65;
 }
 
 .disclaimer {

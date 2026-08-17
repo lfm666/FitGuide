@@ -3,23 +3,11 @@ const assert = require('node:assert/strict')
 const calls = []
 const toasts = []
 let failNextFavoriteWrite = false
+const exercise = require('../data/exercises').exercises[0]
 const storage = {
-  favoriteExerciseIds: ['seated-lat-pulldown', 'seated-lat-pulldown', 'INVALID_ID']
+  favoriteExerciseIds: [exercise.id, exercise.id, 'INVALID_ID']
 }
 const remoteFavoriteIds = new Set()
-const exercise = {
-  id: 'seated-lat-pulldown',
-  name: '坐姿高位下拉',
-  category: '背部',
-  equipment: '高位下拉器',
-  level: '初级',
-  primaryMuscles: ['背阔肌'],
-  secondaryMuscles: ['肱二头肌'],
-  image: 'cloud://exercise.jpg',
-  gif: 'cloud://exercise.gif',
-  steps: ['下拉'],
-  cautions: ['不要借力']
-}
 
 function success(data) {
   return { statusCode: 200, data: { code: '00000', message: '操作成功', data } }
@@ -52,12 +40,6 @@ global.wx = {
           return success(false)
         }
       }
-      if (options.path === '/api/v1/catalog') {
-        return success({ version: 1, disclaimer: '测试', exercises: [exercise] })
-      }
-      if (options.path === `/api/v1/exercises/${exercise.id}`) {
-        return success({ version: 1, disclaimer: '测试', exercise })
-      }
       return { statusCode: 404, data: { code: 'NOT_FOUND', message: '不存在', data: null } }
     },
     getTempFileURL: async ({ fileList }) => ({
@@ -71,11 +53,7 @@ const { getFavoriteIds, toggleFavorite } = require('../utils/favorites')
 async function main() {
   failNextFavoriteWrite = true
   await assert.rejects(getFavoriteIds, (error) => error.code === 'INTERNAL_ERROR')
-  assert.deepEqual(storage.favoriteExerciseIds, [
-    'seated-lat-pulldown',
-    'seated-lat-pulldown',
-    'INVALID_ID'
-  ])
+  assert.deepEqual(storage.favoriteExerciseIds, [exercise.id, exercise.id, 'INVALID_ID'])
   assert.equal(storage.favoriteMigrationV1, undefined)
 
   assert.deepEqual(await getFavoriteIds(), [exercise.id])

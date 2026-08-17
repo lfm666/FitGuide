@@ -50,10 +50,7 @@ CREATE TABLE fit_user_favorite (
     created_at   DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3)
                  COMMENT '收藏时间',
     PRIMARY KEY (user_openid, exercise_id),
-    KEY idx_fit_user_favorite_list (user_openid, created_at, exercise_id),
-    CONSTRAINT fk_fit_user_favorite_exercise
-        FOREIGN KEY (exercise_id) REFERENCES fit_exercise (id)
-        ON UPDATE RESTRICT ON DELETE RESTRICT
+    KEY idx_fit_user_favorite_list (user_openid, created_at, exercise_id)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_general_ci

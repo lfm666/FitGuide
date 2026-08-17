@@ -32,7 +32,7 @@ mvn spring-boot:run
 
 收藏接口必须由微信小程序通过 `wx.cloud.callContainer` 调用，并依赖云托管注入的 `X-WX-OPENID`。本地接口测试可直接设置该请求头。
 
-`sql/init.sql` 面向空库。已有数据库升级时，执行 [`docs/favorites-api-design.md`](docs/favorites-api-design.md) 中的 `fit_user_favorite` 建表语句。
+`sql/init.sql` 面向空库。已有数据库已创建收藏表时，执行 [`sql/migrate-favorites-without-exercise.sql`](sql/migrate-favorites-without-exercise.sql) 删除动作表外键；尚未创建收藏表时，执行 [`docs/favorites-api-design.md`](docs/favorites-api-design.md) 中的建表语句。
 
 运行检查：
 

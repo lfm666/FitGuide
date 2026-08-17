@@ -12,12 +12,10 @@ import java.util.List;
 public interface FavoriteMapper {
 
     @Select("""
-            SELECT f.exercise_id
-            FROM fit_user_favorite f
-            JOIN fit_exercise e ON e.id = f.exercise_id
-            WHERE f.user_openid = #{openId}
-              AND e.enabled = TRUE
-            ORDER BY f.created_at DESC, f.exercise_id
+            SELECT exercise_id
+            FROM fit_user_favorite
+            WHERE user_openid = #{openId}
+            ORDER BY created_at DESC, exercise_id
             """)
     List<String> selectExerciseIds(@Param("openId") String openId);
 

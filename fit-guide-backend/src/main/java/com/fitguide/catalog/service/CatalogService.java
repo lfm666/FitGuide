@@ -76,7 +76,7 @@ public class CatalogService {
         return catalog;
     }
 
-    public void validateExerciseId(String id) {
+    public static void validateExerciseId(String id) {
         if (id == null || id.length() > 64 || !EXERCISE_ID.matcher(id).matches()) {
             throw CatalogApiException.invalidExerciseId();
         }

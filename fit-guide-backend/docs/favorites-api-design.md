@@ -56,7 +56,7 @@
             └─ FavoriteController
                  └─ FavoriteService
                       ├─ FavoriteMapper ── fit_user_favorite
-                      └─ CatalogService  ── 校验动作存在且启用
+                      └─ CatalogService  ── 校验动作 ID 格式
 ```
 
 ## 3. 范围
@@ -66,7 +66,7 @@
 - 当前微信用户的收藏 ID 查询。
 - 收藏和取消收藏。
 - 跨设备同步。
-- 缺失身份、非法动作 ID、动作不存在时的统一错误响应。
+- 缺失身份、非法动作 ID 的统一错误响应。
 - 已上线本地收藏数据的一次性迁移策略。
 
 ### 3.2 本次不做
@@ -116,10 +116,7 @@ CREATE TABLE fit_user_favorite (
     created_at   DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3)
                  COMMENT '收藏时间',
     PRIMARY KEY (user_openid, exercise_id),
-    KEY idx_fit_user_favorite_list (user_openid, created_at, exercise_id),
-    CONSTRAINT fk_fit_user_favorite_exercise
-        FOREIGN KEY (exercise_id) REFERENCES fit_exercise (id)
-        ON UPDATE RESTRICT ON DELETE RESTRICT
+    KEY idx_fit_user_favorite_list (user_openid, created_at, exercise_id)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_general_ci
@@ -130,9 +127,10 @@ CREATE TABLE fit_user_favorite (
 
 - 复合主键天然保证同一用户不能重复收藏同一动作。
 - `created_at` 用于按最近收藏排序。
-- 外键阻止收藏不存在的动作，也避免误删仍被收藏的动作。
-- 动作下线沿用 `fit_exercise.enabled`，不物理删除；查询收藏时只返回仍启用的动作 ID。
-- OpenID 使用大小写敏感的 ASCII 排序规则，动作 ID 继续与 `fit_exercise.id` 保持相同字符集和排序规则。
+- 动作数据由小程序本地维护，收藏表只保存动作 ID，不依赖动作表。
+- OpenID 使用大小写敏感的 ASCII 排序规则。
+
+已有收藏表需执行 `sql/migrate-favorites-without-exercise.sql` 删除原动作表外键。
 
 ## 6. 接口契约
 
@@ -170,8 +168,8 @@ X-WX-OPENID: user-openid
 
 - 按收藏时间倒序返回。
 - 没有收藏时返回空数组，不返回 `null`。
-- 不返回已禁用或已不存在的动作。
-- 首版不分页；单个用户最多只能收藏现有动作总数。
+- 小程序使用本地动作数据过滤已不存在的动作。
+- 首版不分页。
 
 ### 6.2 收藏动作
 
@@ -192,7 +190,7 @@ X-WX-OPENID: user-openid
 
 规则：
 
-- 动作必须存在且 `enabled = true`。
+- 动作 ID 必须符合格式要求。
 - 已收藏时仍返回成功和 `true`。
 - 数据库使用唯一键防重；Mapper 可用 `INSERT IGNORE` 实现幂等写入。
 
@@ -225,7 +223,6 @@ X-WX-OPENID: user-openid
 | ---: | --- | --- |
 | `400` | `INVALID_EXERCISE_ID` | 动作 ID 格式非法 |
 | `401` | `UNAUTHORIZED` | 缺少可信用户 OpenID |
-| `404` | `EXERCISE_NOT_FOUND` | 收藏的动作不存在或已禁用 |
 | `500` | `INTERNAL_ERROR` | 未预期服务异常 |
 
 数据库异常不向客户端暴露 SQL、表名或 OpenID。
@@ -245,20 +242,18 @@ com.fitguide.favorite/
 保持最短实现：
 
 - `FavoriteController` 读取 `X-WX-OPENID`，暴露三个 REST 接口并包装 `Result`。
-- `FavoriteService` 校验 OpenID，调用现有目录服务校验动作，再完成查询、插入和删除。
+- `FavoriteService` 校验 OpenID 和动作 ID 格式，再完成查询、插入和删除。
 - `FavoriteMapper` 直接使用三个注解 SQL，不创建无业务行为的 Repository、Service 接口或复合主键实体。
 - 在现有异常处理器中增加收藏异常映射；请求头使用 `required = false`，由业务代码统一返回 `401`，避免 Spring 缺少请求头异常落到 `500`。
-- 动作 ID 的格式与可用性校验收口在现有 `CatalogService`，收藏服务复用它，不复制正则规则。
+- 动作 ID 的格式校验收口在现有 `CatalogService`，收藏服务复用它，不复制正则规则。
 
 收藏列表查询 SQL：
 
 ```sql
-SELECT f.exercise_id
-FROM fit_user_favorite f
-JOIN fit_exercise e ON e.id = f.exercise_id
-WHERE f.user_openid = #{openId}
-  AND e.enabled = TRUE
-ORDER BY f.created_at DESC, f.exercise_id
+SELECT exercise_id
+FROM fit_user_favorite
+WHERE user_openid = #{openId}
+ORDER BY created_at DESC, exercise_id
 ```
 
 ## 8. 小程序改造
@@ -366,8 +361,7 @@ GET /catalog   → 已有 catalogPromise 缓存的目录
 4. 重复收藏仍成功，Mapper 不产生重复记录。
 5. 取消已收藏和未收藏动作都返回 `false`。
 6. 非法 ID 返回 `400 / INVALID_EXERCISE_ID`。
-7. 不存在或已禁用动作返回 `404 / EXERCISE_NOT_FOUND`。
-8. 收藏列表只返回当前用户且仍启用的动作，并按时间倒序。
+7. 收藏列表只返回当前用户的动作 ID，并按时间倒序。
 
 ### 12.2 小程序最小测试
 

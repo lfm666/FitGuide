@@ -1,8 +1,6 @@
 package com.fitguide.favorite;
 
 import com.fitguide.catalog.controller.CatalogExceptionHandler;
-import com.fitguide.catalog.exception.CatalogApiException;
-import com.fitguide.catalog.service.CatalogService;
 import com.fitguide.favorite.controller.FavoriteController;
 import com.fitguide.favorite.mapper.FavoriteMapper;
 import com.fitguide.favorite.service.FavoriteService;
@@ -13,7 +11,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
 
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -30,14 +27,12 @@ class FavoriteApiTest {
     private static final String EXERCISE_ID = "seated-lat-pulldown";
 
     private FavoriteMapper favoriteMapper;
-    private CatalogService catalogService;
     private MockMvc mockMvc;
 
     @BeforeEach
     void setUp() {
         favoriteMapper = mock(FavoriteMapper.class);
-        catalogService = mock(CatalogService.class);
-        var service = new FavoriteService(favoriteMapper, catalogService);
+        var service = new FavoriteService(favoriteMapper);
         mockMvc = MockMvcBuilders.standaloneSetup(new FavoriteController(service))
                 .setControllerAdvice(new CatalogExceptionHandler())
                 .build();
@@ -89,7 +84,6 @@ class FavoriteApiTest {
                     .andExpect(jsonPath("$.data").value(true));
         }
 
-        verify(catalogService, times(2)).requireAvailableExercise(EXERCISE_ID);
         verify(favoriteMapper, times(2)).insert(OPEN_ID, EXERCISE_ID);
     }
 
@@ -100,40 +94,14 @@ class FavoriteApiTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data").value(false));
 
-        verify(catalogService).validateExerciseId(EXERCISE_ID);
         verify(favoriteMapper).delete(OPEN_ID, EXERCISE_ID);
     }
 
     @Test
     void rejectsInvalidExerciseId() throws Exception {
-        doThrow(CatalogApiException.invalidExerciseId())
-                .when(catalogService).requireAvailableExercise("INVALID_ID");
-
         mockMvc.perform(put("/api/v1/favorites/INVALID_ID")
                         .header("X-WX-OPENID", OPEN_ID))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("INVALID_EXERCISE_ID"));
-    }
-
-    @Test
-    void rejectsMissingExercise() throws Exception {
-        doThrow(CatalogApiException.exerciseNotFound())
-                .when(catalogService).requireAvailableExercise("missing-exercise");
-
-        mockMvc.perform(put("/api/v1/favorites/missing-exercise")
-                        .header("X-WX-OPENID", OPEN_ID))
-                .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.code").value("EXERCISE_NOT_FOUND"));
-    }
-
-    @Test
-    void rejectsDisabledExercise() throws Exception {
-        doThrow(CatalogApiException.exerciseNotFound())
-                .when(catalogService).requireAvailableExercise("disabled-exercise");
-
-        mockMvc.perform(put("/api/v1/favorites/disabled-exercise")
-                        .header("X-WX-OPENID", OPEN_ID))
-                .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.code").value("EXERCISE_NOT_FOUND"));
     }
 }

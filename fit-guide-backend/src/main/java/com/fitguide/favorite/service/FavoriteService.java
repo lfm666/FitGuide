@@ -16,7 +16,6 @@ public class FavoriteService {
     private static final Pattern OPEN_ID = Pattern.compile("^[A-Za-z0-9_-]{1,64}$");
 
     private final FavoriteMapper favoriteMapper;
-    private final CatalogService catalogService;
 
     public List<String> getFavoriteIds(String openId) {
         return favoriteMapper.selectExerciseIds(requireOpenId(openId));
@@ -24,14 +23,14 @@ public class FavoriteService {
 
     public boolean addFavorite(String openId, String exerciseId) {
         openId = requireOpenId(openId);
-        catalogService.requireAvailableExercise(exerciseId);
+        CatalogService.validateExerciseId(exerciseId);
         favoriteMapper.insert(openId, exerciseId);
         return true;
     }
 
     public boolean removeFavorite(String openId, String exerciseId) {
         openId = requireOpenId(openId);
-        catalogService.validateExerciseId(exerciseId);
+        CatalogService.validateExerciseId(exerciseId);
         favoriteMapper.delete(openId, exerciseId);
         return false;
     }

@@ -1,0 +1,66 @@
+# 已生成动作
+
+共 60 个动作，每个动作包含 GIF 和 JPG 资源；中文名称与 [初始化 SQL](../fit-guide-backend/sql/init.sql) 保持一致。
+
+| 英文 ID | 中文名称 | GIF | JPG |
+| --- | --- | --- | --- |
+| `ab-wheel-rollout` | 腹肌轮 | [查看](exercises/ab-wheel-rollout/ab-wheel-rollout.gif) | [查看](exercises/ab-wheel-rollout/ab-wheel-rollout.jpg) |
+| `air-bike` | 风阻自行车 | [查看](exercises/air-bike/air-bike.gif) | [查看](exercises/air-bike/air-bike.jpg) |
+| `assisted-dip` | 辅助双杠臂屈伸 | [查看](exercises/assisted-dip/assisted-dip.gif) | [查看](exercises/assisted-dip/assisted-dip.jpg) |
+| `assisted-pull-up` | 辅助引体向上 | [查看](exercises/assisted-pull-up/assisted-pull-up.gif) | [查看](exercises/assisted-pull-up/assisted-pull-up.jpg) |
+| `cable-biceps-curl` | 绳索二头弯举 | [查看](exercises/cable-biceps-curl/cable-biceps-curl.gif) | [查看](exercises/cable-biceps-curl/cable-biceps-curl.jpg) |
+| `cable-chest-fly` | 绳索夹胸 | [查看](exercises/cable-chest-fly/cable-chest-fly.gif) | [查看](exercises/cable-chest-fly/cable-chest-fly.jpg) |
+| `cable-crunch` | 高位绳索卷腹 | [查看](exercises/cable-crunch/cable-crunch.gif) | [查看](exercises/cable-crunch/cable-crunch.jpg) |
+| `cable-face-pull` | 绳索面拉 | [查看](exercises/cable-face-pull/cable-face-pull.gif) | [查看](exercises/cable-face-pull/cable-face-pull.jpg) |
+| `cable-front-raise` | 绳索前平举 | [查看](exercises/cable-front-raise/cable-front-raise.gif) | [查看](exercises/cable-front-raise/cable-front-raise.jpg) |
+| `cable-glute-kickback` | 绳索后踢腿 | [查看](exercises/cable-glute-kickback/cable-glute-kickback.gif) | [查看](exercises/cable-glute-kickback/cable-glute-kickback.jpg) |
+| `cable-lateral-raise` | 绳索侧平举 | [查看](exercises/cable-lateral-raise/cable-lateral-raise.gif) | [查看](exercises/cable-lateral-raise/cable-lateral-raise.jpg) |
+| `cable-woodchop` | 绳索伐木 | [查看](exercises/cable-woodchop/cable-woodchop.gif) | [查看](exercises/cable-woodchop/cable-woodchop.jpg) |
+| `chest-supported-row` | 胸托划船 | [查看](exercises/chest-supported-row/chest-supported-row.gif) | [查看](exercises/chest-supported-row/chest-supported-row.jpg) |
+| `curved-treadmill` | 无动力跑步机 | [查看](exercises/curved-treadmill/curved-treadmill.gif) | [查看](exercises/curved-treadmill/curved-treadmill.jpg) |
+| `dead-hang` | 单杠悬垂 | [查看](exercises/dead-hang/dead-hang.gif) | [查看](exercises/dead-hang/dead-hang.jpg) |
+| `decline-machine-chest-press` | 下斜器械推胸 | [查看](exercises/decline-machine-chest-press/decline-machine-chest-press.gif) | [查看](exercises/decline-machine-chest-press/decline-machine-chest-press.jpg) |
+| `elliptical-trainer` | 椭圆机 | [查看](exercises/elliptical-trainer/elliptical-trainer.gif) | [查看](exercises/elliptical-trainer/elliptical-trainer.jpg) |
+| `glute-kickback-machine` | 臀部后踢机 | [查看](exercises/glute-kickback-machine/glute-kickback-machine.gif) | [查看](exercises/glute-kickback-machine/glute-kickback-machine.jpg) |
+| `hack-squat` | 哈克深蹲 | [查看](exercises/hack-squat/hack-squat.gif) | [查看](exercises/hack-squat/hack-squat.jpg) |
+| `hanging-knee-raise` | 悬垂举膝 | [查看](exercises/hanging-knee-raise/hanging-knee-raise.gif) | [查看](exercises/hanging-knee-raise/hanging-knee-raise.jpg) |
+| `hip-abduction` | 坐姿髋外展 | [查看](exercises/hip-abduction/hip-abduction.gif) | [查看](exercises/hip-abduction/hip-abduction.jpg) |
+| `hip-adduction` | 坐姿髋内收 | [查看](exercises/hip-adduction/hip-adduction.gif) | [查看](exercises/hip-adduction/hip-adduction.jpg) |
+| `horizontal-leg-press` | 水平腿举 | [查看](exercises/horizontal-leg-press/horizontal-leg-press.gif) | [查看](exercises/horizontal-leg-press/horizontal-leg-press.jpg) |
+| `incline-machine-chest-press` | 上斜器械推胸 | [查看](exercises/incline-machine-chest-press/incline-machine-chest-press.gif) | [查看](exercises/incline-machine-chest-press/incline-machine-chest-press.jpg) |
+| `leg-press` | 45°腿举 | [查看](exercises/leg-press/leg-press.gif) | [查看](exercises/leg-press/leg-press.jpg) |
+| `lying-leg-curl` | 卧式腿弯举 | [查看](exercises/lying-leg-curl/lying-leg-curl.gif) | [查看](exercises/lying-leg-curl/lying-leg-curl.jpg) |
+| `machine-ab-crunch` | 器械卷腹 | [查看](exercises/machine-ab-crunch/machine-ab-crunch.gif) | [查看](exercises/machine-ab-crunch/machine-ab-crunch.jpg) |
+| `machine-chest-press` | 坐姿推胸 | [查看](exercises/machine-chest-press/machine-chest-press.gif) | [查看](exercises/machine-chest-press/machine-chest-press.jpg) |
+| `machine-hip-thrust` | 臀推机臀推 | [查看](exercises/machine-hip-thrust/machine-hip-thrust.gif) | [查看](exercises/machine-hip-thrust/machine-hip-thrust.jpg) |
+| `machine-lateral-raise` | 器械侧平举 | [查看](exercises/machine-lateral-raise/machine-lateral-raise.gif) | [查看](exercises/machine-lateral-raise/machine-lateral-raise.jpg) |
+| `machine-shoulder-press` | 器械肩推 | [查看](exercises/machine-shoulder-press/machine-shoulder-press.gif) | [查看](exercises/machine-shoulder-press/machine-shoulder-press.jpg) |
+| `overhead-rope-triceps-extension` | 绳索过顶臂屈伸 | [查看](exercises/overhead-rope-triceps-extension/overhead-rope-triceps-extension.gif) | [查看](exercises/overhead-rope-triceps-extension/overhead-rope-triceps-extension.jpg) |
+| `pec-deck-fly` | 蝴蝶机夹胸 | [查看](exercises/pec-deck-fly/pec-deck-fly.gif) | [查看](exercises/pec-deck-fly/pec-deck-fly.jpg) |
+| `preacher-curl-machine` | 牧师凳弯举 | [查看](exercises/preacher-curl-machine/preacher-curl-machine.gif) | [查看](exercises/preacher-curl-machine/preacher-curl-machine.jpg) |
+| `recumbent-bike` | 卧式健身车 | [查看](exercises/recumbent-bike/recumbent-bike.gif) | [查看](exercises/recumbent-bike/recumbent-bike.jpg) |
+| `reverse-grip-triceps-pushdown` | 反握三头下压 | [查看](exercises/reverse-grip-triceps-pushdown/reverse-grip-triceps-pushdown.gif) | [查看](exercises/reverse-grip-triceps-pushdown/reverse-grip-triceps-pushdown.jpg) |
+| `reverse-hack-squat` | 哈克机反向深蹲 | [查看](exercises/reverse-hack-squat/reverse-hack-squat.gif) | [查看](exercises/reverse-hack-squat/reverse-hack-squat.jpg) |
+| `reverse-pec-deck-fly` | 反向蝴蝶机飞鸟 | [查看](exercises/reverse-pec-deck-fly/reverse-pec-deck-fly.gif) | [查看](exercises/reverse-pec-deck-fly/reverse-pec-deck-fly.jpg) |
+| `roman-chair-back-extension` | 罗马椅背伸 | [查看](exercises/roman-chair-back-extension/roman-chair-back-extension.gif) | [查看](exercises/roman-chair-back-extension/roman-chair-back-extension.jpg) |
+| `rope-triceps-pushdown` | 绳索三头下压 | [查看](exercises/rope-triceps-pushdown/rope-triceps-pushdown.gif) | [查看](exercises/rope-triceps-pushdown/rope-triceps-pushdown.jpg) |
+| `rotary-torso` | 坐姿转体 | [查看](exercises/rotary-torso/rotary-torso.gif) | [查看](exercises/rotary-torso/rotary-torso.jpg) |
+| `rowing-machine` | 划船机划船 | [查看](exercises/rowing-machine/rowing-machine.gif) | [查看](exercises/rowing-machine/rowing-machine.jpg) |
+| `seated-cable-row` | 坐姿划船 | [查看](exercises/seated-cable-row/seated-cable-row.gif) | [查看](exercises/seated-cable-row/seated-cable-row.jpg) |
+| `seated-calf-raise` | 坐姿提踵 | [查看](exercises/seated-calf-raise/seated-calf-raise.gif) | [查看](exercises/seated-calf-raise/seated-calf-raise.jpg) |
+| `seated-lat-pulldown` | 坐姿高位下拉 | [查看](exercises/seated-lat-pulldown/seated-lat-pulldown.gif) | [查看](exercises/seated-lat-pulldown/seated-lat-pulldown.jpg) |
+| `seated-leg-curl` | 坐姿腿弯举 | [查看](exercises/seated-leg-curl/seated-leg-curl.gif) | [查看](exercises/seated-leg-curl/seated-leg-curl.jpg) |
+| `seated-leg-extension` | 坐姿腿屈伸 | [查看](exercises/seated-leg-extension/seated-leg-extension.gif) | [查看](exercises/seated-leg-extension/seated-leg-extension.jpg) |
+| `single-arm-cable-lat-pulldown` | 单臂绳索下拉 | [查看](exercises/single-arm-cable-lat-pulldown/single-arm-cable-lat-pulldown.gif) | [查看](exercises/single-arm-cable-lat-pulldown/single-arm-cable-lat-pulldown.jpg) |
+| `single-arm-machine-row` | 单臂器械划船 | [查看](exercises/single-arm-machine-row/single-arm-machine-row.gif) | [查看](exercises/single-arm-machine-row/single-arm-machine-row.jpg) |
+| `single-leg-calf-raise` | 单腿提踵 | [查看](exercises/single-leg-calf-raise/single-leg-calf-raise.gif) | [查看](exercises/single-leg-calf-raise/single-leg-calf-raise.jpg) |
+| `single-leg-machine-hip-thrust` | 臀推机单腿臀推 | [查看](exercises/single-leg-machine-hip-thrust/single-leg-machine-hip-thrust.gif) | [查看](exercises/single-leg-machine-hip-thrust/single-leg-machine-hip-thrust.jpg) |
+| `ski-erg` | 滑雪机 | [查看](exercises/ski-erg/ski-erg.gif) | [查看](exercises/ski-erg/ski-erg.jpg) |
+| `smith-machine-squat` | 史密斯机深蹲 | [查看](exercises/smith-machine-squat/smith-machine-squat.gif) | [查看](exercises/smith-machine-squat/smith-machine-squat.jpg) |
+| `spin-bike` | 动感单车 | [查看](exercises/spin-bike/spin-bike.gif) | [查看](exercises/spin-bike/spin-bike.jpg) |
+| `stair-climber` | 楼梯机 | [查看](exercises/stair-climber/stair-climber.gif) | [查看](exercises/stair-climber/stair-climber.jpg) |
+| `standing-calf-raise` | 站姿提踵 | [查看](exercises/standing-calf-raise/standing-calf-raise.gif) | [查看](exercises/standing-calf-raise/standing-calf-raise.jpg) |
+| `standing-single-leg-curl` | 站姿单腿弯举 | [查看](exercises/standing-single-leg-curl/standing-single-leg-curl.gif) | [查看](exercises/standing-single-leg-curl/standing-single-leg-curl.jpg) |
+| `straight-arm-cable-pulldown` | 直臂下压 | [查看](exercises/straight-arm-cable-pulldown/straight-arm-cable-pulldown.gif) | [查看](exercises/straight-arm-cable-pulldown/straight-arm-cable-pulldown.jpg) |
+| `treadmill-walk-run` | 跑步机快走/跑步 | [查看](exercises/treadmill-walk-run/treadmill-walk-run.gif) | [查看](exercises/treadmill-walk-run/treadmill-walk-run.jpg) |
+| `vertical-climber` | 登山机 | [查看](exercises/vertical-climber/vertical-climber.gif) | [查看](exercises/vertical-climber/vertical-climber.jpg) |

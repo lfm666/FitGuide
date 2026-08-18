@@ -6,13 +6,18 @@ function initCloud() {
   wx.cloud.init({ env: ENV_ID })
 }
 
-async function request(path, method = 'GET') {
-  const response = await wx.cloud.callContainer({
+async function request(path, method = 'GET', data) {
+  const options = {
     config: { env: ENV_ID },
     path,
     method,
-    header: { 'X-WX-SERVICE': SERVICE_NAME }
-  })
+    header: {
+      'X-WX-SERVICE': SERVICE_NAME,
+      'content-type': 'application/json'
+    }
+  }
+  if (data !== undefined) options.data = data
+  const response = await wx.cloud.callContainer(options)
   const body = response && response.data
 
   if (!response || response.statusCode < 200 || response.statusCode >= 300 || !body || body.code !== '00000') {
@@ -59,6 +64,31 @@ function removeFavorite(id) {
   return request(`/api/v1/favorites/${encodeExerciseId(id)}`, 'DELETE')
 }
 
+async function getTrainingPlans() {
+  const plans = await request('/api/v1/training-plans')
+  const invalid = !Array.isArray(plans) || plans.some((plan) => (
+    !plan || typeof plan.id !== 'string' || typeof plan.name !== 'string'
+    || !Array.isArray(plan.exercises)
+    || plan.exercises.some((item) => (
+      !item || typeof item.exerciseId !== 'string' || !Number.isInteger(item.setCount)
+    ))
+  ))
+  if (invalid) throw new Error('训练计划数据格式错误')
+  return plans
+}
+
+function createTrainingPlan(plan) {
+  return request('/api/v1/training-plans', 'POST', plan)
+}
+
+function updateTrainingPlan(id, plan) {
+  return request(`/api/v1/training-plans/${encodeURIComponent(id)}`, 'PUT', plan)
+}
+
+function deleteTrainingPlan(id) {
+  return request(`/api/v1/training-plans/${encodeURIComponent(id)}`, 'DELETE')
+}
+
 function encodeExerciseId(id) {
   if (typeof id !== 'string' || !id) {
     const error = new Error('动作 ID 无效')
@@ -76,5 +106,9 @@ module.exports = {
   getExercise,
   getFavoriteIds,
   addFavorite,
-  removeFavorite
+  removeFavorite,
+  getTrainingPlans,
+  createTrainingPlan,
+  updateTrainingPlan,
+  deleteTrainingPlan
 }

@@ -35,7 +35,7 @@ public class FavoriteService {
         return false;
     }
 
-    private static String requireOpenId(String openId) {
+    public static String requireOpenId(String openId) {
         if (openId == null || !OPEN_ID.matcher(openId).matches()) {
             throw FavoriteApiException.unauthorized();
         }

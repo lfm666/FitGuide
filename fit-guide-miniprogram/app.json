@@ -2,6 +2,8 @@
   "pages": [
     "pages/index/index",
     "pages/favorites/favorites",
+    "pages/plans/plans",
+    "pages/plan/edit",
     "pages/exercise/detail"
   ],
   "window": {
@@ -28,6 +30,12 @@
         "text": "收藏",
         "iconPath": "assets/tabbar/favorite.png",
         "selectedIconPath": "assets/tabbar/favorite-active.png"
+      },
+      {
+        "pagePath": "pages/plans/plans",
+        "text": "计划",
+        "iconPath": "assets/tabbar/plan.png",
+        "selectedIconPath": "assets/tabbar/plan-active.png"
       }
     ]
   },

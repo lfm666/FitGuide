@@ -1,0 +1,149 @@
+<view class="edit-page safe-bottom">
+  <view wx:if="{{loading}}" class="empty-state">
+    <view class="empty-title">编辑器加载中</view>
+  </view>
+
+  <view wx:elif="{{loadFailed}}" class="empty-state">
+    <view class="empty-title">编辑器加载失败</view>
+    <view class="empty-copy">请检查网络后重试</view>
+    <button class="secondary-button" bindtap="loadEditor">重新加载</button>
+  </view>
+
+  <view wx:elif="{{notFound}}" class="empty-state">
+    <view class="empty-title">计划不存在或已删除</view>
+    <view class="empty-copy">返回计划列表刷新后再试</view>
+    <button class="primary-button" bindtap="backToPlans">返回计划列表</button>
+  </view>
+
+  <block wx:else>
+    <view class="edit-header">
+      <view class="eyebrow">{{planId ? 'EDIT PLAN' : 'NEW PLAN'}}</view>
+      <view class="edit-title">{{planId ? '编辑训练计划' : '新建训练计划'}}</view>
+      <view class="field-label">计划名称</view>
+      <input
+        class="name-input"
+        value="{{name}}"
+        maxlength="50"
+        placeholder="例如：推日"
+        bindinput="onNameInput"
+        aria-label="计划名称"
+      />
+    </view>
+
+    <view class="edit-content">
+      <view class="section-heading">
+        <view>
+          <view class="section-title">训练动作</view>
+          <view class="section-copy">{{items.length}} / 50 个动作</view>
+        </view>
+        <button class="secondary-button compact-button" bindtap="openSelector">添加动作</button>
+      </view>
+
+      <view wx:if="{{items.length}}" class="item-list">
+        <view wx:for="{{items}}" wx:key="exerciseId" class="item-card {{item.missing ? 'missing-item' : ''}}">
+          <view class="item-index">{{index + 1}}</view>
+          <view class="item-main">
+            <view class="item-name">{{item.displayName}}</view>
+            <view class="item-equipment">{{item.equipmentText}}</view>
+            <view class="set-row">
+              <button
+                class="round-button"
+                data-index="{{index}}"
+                data-delta="-1"
+                bindtap="changeSetCount"
+                disabled="{{item.setCount <= 1}}"
+                aria-label="减少{{item.displayName}}组数"
+              >−</button>
+              <input
+                class="set-input"
+                type="number"
+                value="{{item.setCount}}"
+                data-index="{{index}}"
+                bindblur="onSetCountBlur"
+                aria-label="{{item.displayName}}组数"
+              />
+              <text class="set-unit">组</text>
+              <button
+                class="round-button"
+                data-index="{{index}}"
+                data-delta="1"
+                bindtap="changeSetCount"
+                disabled="{{item.setCount >= 99}}"
+                aria-label="增加{{item.displayName}}组数"
+              >＋</button>
+            </view>
+            <view class="item-actions">
+              <button class="text-button" data-index="{{index}}" data-delta="-1" bindtap="moveItem" disabled="{{index === 0}}" aria-label="上移{{item.displayName}}">上移</button>
+              <button class="text-button" data-index="{{index}}" data-delta="1" bindtap="moveItem" disabled="{{index === items.length - 1}}" aria-label="下移{{item.displayName}}">下移</button>
+              <button class="text-button danger-text" data-index="{{index}}" bindtap="removeItem" aria-label="移除{{item.displayName}}">移除</button>
+            </view>
+          </view>
+        </view>
+      </view>
+      <view wx:else class="inline-empty">还没有动作，点击“添加动作”开始选择</view>
+
+      <button class="save-button" bindtap="savePlan" loading="{{saving}}" disabled="{{saving}}" aria-label="保存训练计划">保存计划</button>
+    </view>
+
+    <view wx:if="{{selecting}}" class="selector-mask">
+      <view class="selector-panel safe-bottom">
+        <view class="selector-header">
+          <view class="selector-title">选择动作</view>
+          <button class="close-button" bindtap="cancelSelector" aria-label="取消选择动作">×</button>
+        </view>
+        <input
+          class="selector-search"
+          value="{{selectorQuery}}"
+          placeholder="搜索动作、器械或肌群"
+          bindinput="onSelectorSearch"
+          aria-label="搜索动作、器械或肌群"
+        />
+        <scroll-view class="filter-scroll" scroll-x enhanced show-scrollbar="{{false}}">
+          <view class="filter-row">
+            <button
+              wx:for="{{categories}}"
+              wx:key="*this"
+              class="filter-button {{selectorCategory === item ? 'active' : ''}}"
+              data-category="{{item}}"
+              bindtap="onSelectorCategory"
+            >{{item === '全部' ? '全部部位' : item}}</button>
+          </view>
+        </scroll-view>
+        <scroll-view class="filter-scroll" scroll-x enhanced show-scrollbar="{{false}}">
+          <view class="filter-row">
+            <button
+              wx:for="{{equipments}}"
+              wx:key="*this"
+              class="filter-button {{selectorEquipment === item ? 'active' : ''}}"
+              data-equipment="{{item}}"
+              bindtap="onSelectorEquipment"
+            >{{item}}</button>
+          </view>
+        </scroll-view>
+        <scroll-view class="selector-list" scroll-y enhanced>
+          <button
+            wx:for="{{selectorExercises}}"
+            wx:key="id"
+            class="selector-item {{item.checked ? 'checked' : ''}}"
+            data-id="{{item.id}}"
+            data-added="{{item.added}}"
+            bindtap="toggleExercise"
+            disabled="{{item.added}}"
+            aria-label="{{item.added ? '已添加' : item.checked ? '取消选择' : '选择'}}{{item.name}}"
+          >
+            <text class="check-mark">{{item.added || item.checked ? '✓' : '＋'}}</text>
+            <view class="selector-item-copy">
+              <view class="selector-item-name">{{item.name}}</view>
+              <view class="selector-item-meta">{{item.id}} · {{item.equipment}}{{item.added ? ' · 已添加' : ''}}</view>
+            </view>
+          </button>
+          <view wx:if="{{!selectorExercises.length}}" class="selector-empty">没有找到相关动作</view>
+        </scroll-view>
+        <view class="selector-footer">
+          <button class="secondary-button" bindtap="cancelSelector">取消</button>
+          <button class="primary-button" bindtap="finishSelector">完成选择</button>
+        </view>
+      </view>
+    </view>
+  </block>
+</view>

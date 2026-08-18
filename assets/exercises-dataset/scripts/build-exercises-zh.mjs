@@ -8,6 +8,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const sourcePath = resolve(root, 'data/exercises.json')
 const outputPath = resolve(root, 'data/exercises-zh.json')
 const mediaBase = 'https://7072-prod-d4gi5hg2s057d6cfc-1466119943.tcb.qcloud.la/exercises-dataset/'
+const CATALOG_VERSION = 2
 const run = promisify(execFile)
 
 const categories = {
@@ -346,7 +347,7 @@ if (exercises.some(({ name, steps }) => !name || !Array.isArray(steps) || !steps
 }
 
 const output = {
-  version: 1,
+  version: CATALOG_VERSION,
   disclaimer: '内容仅供一般健身动作参考；首次使用器械时请让教练确认座椅、限位和重量设置。',
   attribution: source[0].attribution,
   exercises

@@ -1,0 +1,47 @@
+<view class="plans-page safe-bottom">
+  <view class="plans-header">
+    <view>
+      <view class="eyebrow">TRAINING PLANS</view>
+      <view class="plans-title">我的训练计划</view>
+      <view class="plans-copy">安排动作和组数，按自己的节奏训练</view>
+    </view>
+    <button class="primary-button header-button" bindtap="createPlan" aria-label="新建训练计划">新建计划</button>
+  </view>
+
+  <view class="plans-content">
+    <view wx:if="{{loading}}" class="empty-state">
+      <view class="empty-title">训练计划加载中</view>
+    </view>
+
+    <view wx:elif="{{loadFailed}}" class="empty-state">
+      <view class="empty-title">训练计划加载失败</view>
+      <view class="empty-copy">请检查网络后重试</view>
+      <button class="secondary-button" bindtap="loadPlans">重新加载</button>
+    </view>
+
+    <view wx:elif="{{plans.length}}" class="plan-list">
+      <view wx:for="{{plans}}" wx:key="id" class="plan-card">
+        <view class="plan-name">{{item.name}}</view>
+        <view class="plan-summary">{{item.exerciseCount}} 个动作 · {{item.exerciseNames}}</view>
+        <view class="plan-actions">
+          <button class="secondary-button" data-id="{{item.id}}" bindtap="editPlan" aria-label="编辑{{item.name}}">编辑</button>
+          <button
+            class="danger-button"
+            data-id="{{item.id}}"
+            bindtap="deletePlan"
+            loading="{{deletingPlanId === item.id}}"
+            disabled="{{deletingPlanId === item.id}}"
+            aria-label="删除{{item.name}}"
+          >删除</button>
+        </view>
+      </view>
+    </view>
+
+    <view wx:else class="empty-state">
+      <view class="empty-mark">＋</view>
+      <view class="empty-title">还没有训练计划</view>
+      <view class="empty-copy">选几个动作，创建你的第一份计划</view>
+      <button class="primary-button" bindtap="createPlan">新建计划</button>
+    </view>
+  </view>
+</view>

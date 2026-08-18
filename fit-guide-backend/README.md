@@ -1,6 +1,6 @@
 # FitGuide 后端
 
-Spring Boot 3 / JDK 21 / MySQL 5.7 的动作目录与用户收藏服务。
+Spring Boot 3 / JDK 21 / MySQL 5.7 的动作目录、用户收藏与训练计划服务。
 
 ## 本地启动
 
@@ -28,11 +28,17 @@ mvn spring-boot:run
 - `GET http://localhost:19000/api/v1/favorites`
 - `PUT http://localhost:19000/api/v1/favorites/seated-lat-pulldown`
 - `DELETE http://localhost:19000/api/v1/favorites/seated-lat-pulldown`
+- `GET http://localhost:19000/api/v1/training-plans`
+- `POST http://localhost:19000/api/v1/training-plans`
+- `PUT http://localhost:19000/api/v1/training-plans/12`
+- `DELETE http://localhost:19000/api/v1/training-plans/12`
 - `http://localhost:19000/swagger-ui.html`
 
-收藏接口必须由微信小程序通过 `wx.cloud.callContainer` 调用，并依赖云托管注入的 `X-WX-OPENID`。本地接口测试可直接设置该请求头。
+收藏和训练计划接口必须由微信小程序通过 `wx.cloud.callContainer` 调用，并依赖云托管注入的 `X-WX-OPENID`。本地接口测试可直接设置该请求头。
 
 `sql/init.sql` 面向空库。已有数据库已创建收藏表时，执行 [`sql/migrate-favorites-without-exercise.sql`](sql/migrate-favorites-without-exercise.sql) 删除动作表外键；尚未创建收藏表时，执行 [`docs/favorites-api-design.md`](docs/favorites-api-design.md) 中的建表语句。
+
+已有数据库新增训练计划功能时，执行 [`sql/add-training-plans.sql`](sql/add-training-plans.sql)。
 
 运行检查：
 

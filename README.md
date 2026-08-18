@@ -2,24 +2,25 @@
 
 # FitGuide
 
-**面向健身新手的动作指南，包含微信原生小程序与 Spring Boot 后端。**
+**面向健身新手的微信动作指南：查动作、看演示、存收藏。**
 
 <p>
   <img src="https://img.shields.io/badge/WeChat-Mini_Program-07C160?logo=wechat&logoColor=white" alt="WeChat Mini Program">
-  <img src="https://img.shields.io/badge/Exercises-60-C7F24A" alt="60 exercises">
-  <img src="https://img.shields.io/badge/Backend-Spring_Boot_3.5-123B31?logo=springboot&logoColor=white" alt="Spring Boot 3.5">
+  <img src="https://img.shields.io/badge/Exercises-1324-C7F24A" alt="1324 exercises">
+  <img src="https://img.shields.io/badge/Data-Local-123B31" alt="Local exercise data">
+  <img src="https://img.shields.io/badge/Backend-Spring_Boot_3.5-6DB33F?logo=springboot&logoColor=white" alt="Spring Boot 3.5">
 </p>
 
 </div>
 
 ## 项目简介
 
-FitGuide 是一款面向健身新手的动作指南。用户可以按训练部位或器械筛选动作，也可以直接搜索动作、器械和肌群；进入详情页后，可查看动作演示、目标肌群、分步说明与安全提示，并将常练动作同步到云端收藏。
+FitGuide 包含微信原生小程序和 Spring Boot 后端。小程序内置 **1324 条中文动作数据**，覆盖 **10 个训练部位**和 **28 种器械**，支持搜索、组合筛选、动作详情、静态图与 GIF 演示；后端通过微信云托管提供跨设备收藏。
 
-仓库采用前后端同仓结构，包含微信原生小程序和基于 Spring Boot、MySQL 的动作目录与收藏服务。项目当前收录 **60 个动作**，覆盖 **10 个训练部位**、**48 种器械**；图片与 GIF 使用 CloudBase 云存储或外部 HTTP(S) 地址。
+动作目录已由远程 API 改为本地静态数据，列表、筛选和详情无需请求后端；只有收藏功能依赖云托管服务。动作数据位于 `fit-guide-miniprogram/data/exercises.json`，运行时直接加载生成的 `exercises.js`。
 
 > [!IMPORTANT]
-> 小程序通过 `wx.cloud.callContainer` 调用微信云托管后端；收藏接口使用云托管注入的用户 OpenID 隔离数据。
+> 小程序中的动作数据与媒体来源于开源项目 [hasaneyldrm/exercises-dataset](https://github.com/hasaneyldrm/exercises-dataset)。来源项目的代码与数据采用 MIT License；图片、GIF 等媒体资源版权归 [GymVisual](https://gymvisual.com/) 所有，不属于 MIT 授权范围。
 
 ## 应用截图
 
@@ -34,63 +35,53 @@ FitGuide 是一款面向健身新手的动作指南。用户可以按训练部�
   </tr>
 </table>
 
-> [!NOTE]
-> 本小程序使用的动作静态图片与 GIF 动作演示素材均由 **Codex 生成**。
-
 ## 主要功能
 
-- **动作检索**：按动作名称、器械名称、主要肌群和次要肌群搜索。
-- **组合筛选**：训练部位与器械筛选可同时生效，并实时展示结果数量。
-- **动作详情**：展示动作难度、目标肌群、动作步骤、注意事项和 GIF 演示。
-- **媒体降级**：GIF 按需加载；加载失败时保留静态图，并支持重新加载。
-- **混合媒体地址**：支持 `cloud://` fileID、`https://` 和 `http://` 地址；CloudBase fileID 会在运行时换取临时 HTTPS 链接。
-- **云端收藏**：使用微信云托管 OpenID 和 MySQL 保存常练动作，无需额外登录页，并支持跨设备同步。
-- **异常状态**：覆盖无搜索结果、图片加载失败和无效动作链接等场景。
-- **目录 API**：后端提供动作列表筛选、部位/器械列表和动作详情查询。
+- 按动作名称、器械和肌群搜索。
+- 按训练部位与器械组合筛选。
+- 查看主要肌群、次要肌群、动作步骤、静态图和 GIF 演示。
+- GIF 加载失败时保留静态图，并支持重试。
+- 动作目录随小程序本地加载，不依赖目录 API。
+- 使用微信 OpenID 将收藏保存到 MySQL，并迁移旧版本地收藏。
+- 处理无结果、无效动作、媒体失败和服务异常状态。
 
-## 技术实现
+## 技术栈
 
-| 模块 | 说明 |
+| 模块 | 技术与职责 |
 | --- | --- |
 | 小程序 | 微信原生小程序、WXML、WXSS、JavaScript（CommonJS） |
-| 小程序数据 | 通过微信云托管目录 API 加载 |
-| 收藏存储 | MySQL；`wx` 本地存储仅用于一次性旧收藏迁移 |
-| 动作媒体 | CloudBase `cloud://` fileID 或 HTTP(S) 地址；云文件按需换取临时 HTTPS |
-| 云开发初始化 | `app.js` 中调用 `wx.cloud.init`，用于解析 `cloud://` 文件 |
-| 后端 | JDK 21、Spring Boot 3.5、Spring MVC |
-| 数据访问 | MyBatis-Plus、MySQL 5.7 |
+| 动作目录 | 本地 JSON / CommonJS，共 1324 条动作 |
+| 动作媒体 | 对象存储 HTTPS 地址；同时兼容 CloudBase `cloud://` fileID |
+| 收藏服务 | 微信云托管、OpenID、Spring Boot、MyBatis-Plus、MySQL |
+| 后端环境 | JDK 21、Spring Boot 3.5、MySQL 5.7 |
 | 接口文档 | SpringDoc OpenAPI / Swagger UI |
 
 ## 快速开始
 
-### 环境要求
+### 运行小程序
+
+环境要求：
 
 - [微信开发者工具](https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html)
-- Node.js（仅用于数据同步和检查脚本）
-- JDK 21、Maven、MySQL 5.7（仅运行后端时需要）
-
-### 运行小程序
+- 一个可用的小程序 AppID
 
 ```bash
 git clone https://github.com/lfm666/FitGuide.git
 cd FitGuide
-cd fit-guide-miniprogram
-node scripts/sync-exercises.js
 ```
 
-随后在微信开发者工具中：
+在微信开发者工具中导入 `fit-guide-miniprogram` 目录并编译即可。项目没有 npm 依赖，不需要执行 `npm install`。
 
-1. 选择“导入项目”，目录指向 `fit-guide-miniprogram`。
-2. 在开发者工具中选择或填写小程序 AppID；本地 `project.config.json` 会被 Git 忽略，不提交到仓库。
-3. 确认 `app.js` 中的 CloudBase 环境 ID 与 `cloud://` fileID 所属环境一致。
-4. 编译并打开“动作库”页面。
+如需使用云端收藏，还需：
 
-小程序没有 npm 依赖，因此不需要执行 `npm install`。
+1. 在 `fit-guide-miniprogram/utils/api.js` 中填写自己的 CloudBase 环境 ID 和云托管服务名。
+2. 部署后端并初始化 MySQL。
+3. 确保请求由 `wx.cloud.callContainer` 发出，以便云托管注入 `X-WX-OPENID`。
+4. 在微信公众平台配置动作媒体所在的合法下载域名。
 
 ### 运行后端
 
-1. 创建 `fit_guide` 数据库，并在该数据库中执行 `fit-guide-backend/sql/init.sql`。
-2. 设置本地数据库连接并启动服务：
+创建 `fit_guide` 数据库，在空库中执行 `fit-guide-backend/sql/init.sql`，然后启动服务：
 
 ```powershell
 cd fit-guide-backend
@@ -100,134 +91,101 @@ $env:MYSQL_PASSWORD='your-password'
 mvn spring-boot:run
 ```
 
-服务默认监听 `http://localhost:19000`，提供以下接口：
+服务默认监听 `http://localhost:19000`，Swagger UI 位于 `http://localhost:19000/swagger-ui.html`。小程序当前使用以下收藏接口：
 
 | 接口 | 说明 |
 | --- | --- |
-| `GET /api/v1/catalog` | 获取动作目录；可选 `category`、`equipment` 精确筛选 |
-| `GET /api/v1/catalog/categories` | 获取训练部位列表 |
-| `GET /api/v1/catalog/equipments` | 获取器械列表 |
-| `GET /api/v1/exercises/{id}` | 获取动作详情 |
 | `GET /api/v1/favorites` | 获取当前用户收藏的动作 ID |
 | `PUT /api/v1/favorites/{id}` | 收藏动作 |
 | `DELETE /api/v1/favorites/{id}` | 取消收藏 |
-| `GET /swagger-ui.html` | 查看 Swagger UI |
 
-接口返回统一的 `{ code, message, data }` 结构。收藏接口依赖微信云托管注入的 `X-WX-OPENID`。更多后端说明见 [`fit-guide-backend/README.md`](fit-guide-backend/README.md)、[`fit-guide-backend/docs/backend-design.md`](fit-guide-backend/docs/backend-design.md) 和 [`fit-guide-backend/docs/favorites-api-design.md`](fit-guide-backend/docs/favorites-api-design.md)。
+已有数据库若仍保留收藏与动作表的外键，请执行 `fit-guide-backend/sql/migrate-favorites-without-exercise.sql`。更多说明见 [`fit-guide-backend/README.md`](fit-guide-backend/README.md)。
 
-### 远程媒体配置
+## 动作数据
 
-动作图片和 GIF 可以托管在 CloudBase 云存储，也可以使用外部 HTTP(S) 地址。
-
-使用 `cloud://` fileID 时：
-
-- 在 `app.js` 中初始化对应的 CloudBase 环境。
-- 云存储建议设置为私有读，由 `wx.cloud.getTempFileURL` 在运行时换取临时 HTTPS 链接。
-- 不要把临时 HTTPS 链接写回数据文件，只保存稳定的 `cloud://` fileID。
-
-使用外部 HTTP(S) 地址时：
-
-- 将对应域名配置为微信公众平台的合法下载域名。
-- `https://` 适合正式环境；`http://` 虽然被数据校验接受，但真机和发布环境可能受平台安全策略限制。
-
-CloudBase 资源域名格式示例（请替换为控制台中的实际域名）：
+### 数据流
 
 ```text
-https://<bucket-appid>.tcb.qcloud.la
+assets/exercises-dataset/data/exercises.json
+                │ 中文字段构建
+                ▼
+assets/exercises-dataset/data/exercises-zh.json
+                │ 复制为小程序数据源
+                ▼
+fit-guide-miniprogram/data/exercises.json
+                │ sync-exercises.js 校验并生成
+                ▼
+fit-guide-miniprogram/data/exercises.js
 ```
 
-## 数据维护
+当前数据规模：
 
-`fit-guide-miniprogram/data/exercises.json` 是小程序动作数据的源文件，`fit-guide-miniprogram/data/exercises.js` 是供小程序运行时加载的生成文件。
+| 内容 | 数量 |
+| --- | ---: |
+| 动作 | 1324 |
+| 训练部位 | 10 |
+| 器械 | 28 |
+| JPG 图片 | 1324 |
+| GIF 演示 | 1324 |
 
-修改动作数据后执行：
+更新源数据后的构建命令：
 
-```bash
-cd fit-guide-miniprogram
+```powershell
+node assets/exercises-dataset/scripts/build-exercises-zh.mjs
+Copy-Item assets/exercises-dataset/data/exercises-zh.json fit-guide-miniprogram/data/exercises.json
+Set-Location fit-guide-miniprogram
 node scripts/sync-exercises.js
 ```
 
-脚本会检查必填字段、重复 ID，以及 `cloud://`、`http://` 或 `https://` 媒体地址，然后重新生成 `data/exercises.js`。不要直接编辑生成文件。
+`build-exercises-zh.mjs` 会映射部位、器械和肌群，并补全中文动作名；首次翻译缺失名称时需要访问在线翻译服务。不要直接编辑生成文件 `fit-guide-miniprogram/data/exercises.js`。
 
-后端运行时从 MySQL 读取数据，`fit-guide-backend/sql/init.sql` 用于首次初始化。当前两个模块不会自动同步；修改后端动作数据时，还需更新数据库记录并递增 `fit_catalog.version`。
+每条小程序动作数据包含：
 
-每条动作数据包含以下字段：
-
-| 字段 | 类型 | 必填 | 说明 |
-| --- | --- | :---: | --- |
-| `id` | `string` | 是 | 动作的唯一标识，用于详情页路由；使用稳定的 kebab-case 英文名称 |
-| `name` | `string` | 是 | 展示给用户的中文动作名称 |
-| `category` | `string` | 是 | 训练部位分类，例如胸部、背部、腿部或核心 |
-| `equipment` | `string` | 是 | 完成动作所需的器械名称，也用于搜索和筛选 |
-| `level` | `string` | 是 | 动作难度，当前使用初级或中级 |
-| `primaryMuscles` | `string[]` | 是 | 动作主要刺激的肌群列表 |
-| `secondaryMuscles` | `string[]` | 是 | 动作辅助刺激的肌群列表；没有时使用空数组 |
-| `image` | `string` | 是 | 动作静态封面地址，支持 `cloud://`、`http://` 或 `https://` |
-| `gif` | `string` | 是 | 动作演示地址，支持 `cloud://`、`http://` 或 `https://`；详情页按需加载 |
-| `steps` | `string[]` | 是 | 按正确顺序排列的动作执行步骤 |
-| `cautions` | `string[]` | 是 | 安全注意事项和常见错误提示 |
+| 字段 | 说明 |
+| --- | --- |
+| `id` | 动作唯一 ID |
+| `name` | 中文动作名称 |
+| `category` | 训练部位 |
+| `equipment` | 使用器械 |
+| `primaryMuscles` | 主要肌群 |
+| `secondaryMuscles` | 次要肌群 |
+| `image` | JPG 静态图地址 |
+| `gif` | GIF 演示地址 |
+| `steps` | 中文动作步骤 |
 
 ## 项目检查
 
-```bash
-# 进入小程序目录
+```powershell
 cd fit-guide-miniprogram
-
-# 检查后端收藏调用、旧数据迁移和页面状态
+node scripts/check-media.js
+node scripts/test-api.js
 node scripts/test-favorites.js
 
-# 检查云托管接口封装
-node scripts/test-api.js
-
-# 检查媒体地址格式
-node scripts/check-media.js
-
-# 检查动作数据、生成文件与筛选逻辑
-node tests/exercises.test.js
-
-# 检查后端 API
 cd ../fit-guide-backend
 mvn test
 ```
 
-媒体检查不访问远程文件，只检查当前 60 个动作对应的 120 个地址格式。CloudBase 文件的实际权限和临时链接获取需要在小程序运行时验证。
+媒体检查只校验地址与文件后缀，不会访问远程资源；发布前仍需在真机验证图片、GIF、搜索、筛选和收藏。
 
 ## 目录结构
 
 ```text
 FitGuide/
-├── fit-guide-miniprogram/
-│   ├── assets/             # TabBar 图标
-│   ├── data/               # 动作数据源与生成文件
-│   ├── pages/              # 动作库、详情与收藏页面
-│   ├── scripts/            # 数据同步和检查脚本
-│   ├── tests/              # 小程序逻辑检查
-│   ├── utils/              # 筛选、媒体解析、查询与收藏工具
-│   ├── app.js
-│   └── app.json
-├── fit-guide-backend/
-│   ├── docs/               # 后端设计文档
-│   ├── sql/init.sql        # MySQL 初始化脚本
-│   ├── src/main/           # Spring Boot 应用代码
-│   ├── src/test/           # API 测试
-│   ├── Dockerfile
-│   └── pom.xml
-├── screenshots/            # README 展示截图
+├── assets/exercises-dataset/  # 上游原始数据、中文构建脚本及 1324 组媒体
+├── fit-guide-miniprogram/     # 微信原生小程序
+│   ├── data/                  # 小程序动作数据源与生成文件
+│   ├── pages/                 # 动作库、详情、收藏
+│   ├── scripts/               # 数据同步与检查脚本
+│   └── utils/                 # 数据筛选、媒体、接口与收藏逻辑
+├── fit-guide-backend/         # Spring Boot 收藏服务及历史目录接口
+├── screenshots/               # README 截图
 └── README.md
 ```
 
-## 发布前检查
+## 数据来源与版权
 
-- 在微信开发者工具中选择正式 AppID；`project.config.json` 仅保留在本地，不提交到 Git。
-- 确认 `app.js` 中的 CloudBase 环境 ID 与媒体 fileID 一致。
-- 将外部 HTTP(S) 地址对应的域名配置并验证为合法下载域名。
-- 将 CloudBase 对象存储设置为合适的读权限；私有文件使用临时 URL。
-- 同步最新动作数据，并执行收藏与媒体检查脚本。
-- 在 iOS、Android 真机验证搜索、筛选、收藏和 GIF 加载。
-- 确认弱网或媒体加载失败时，静态图与文字说明仍可使用。
-- 后端部署前执行 `mvn test`，确认生产数据库已初始化并通过环境变量或部署平台密钥注入连接信息。
-- 生产环境限制 Swagger UI 的访问，并为 API 配置 HTTPS。
+- 数据集来源：[hasaneyldrm/exercises-dataset](https://github.com/hasaneyldrm/exercises-dataset)
+- 来源项目代码与数据：MIT License
+- 媒体资源：© [GymVisual](https://gymvisual.com/)，保留所有权利
 
-## 素材与安全说明
-
-本项目中的动作素材由 Codex 生成，用于动作说明和产品展示。`cloud://` fileID 和临时 URL 不是访问密钥；不要把 CloudBase SecretId、SecretKey 或数据库凭据提交到仓库，应通过环境变量或部署平台密钥注入。训练内容仅供一般健身参考；首次使用器械时，请让专业教练确认座椅、限位和重量设置。如有伤病或身体不适，请先咨询医生或专业人士。
+请在使用、分发或部署媒体资源前确认 GymVisual 的授权要求。训练内容仅供一般健身参考；如有伤病、疼痛或其他身体不适，请先咨询医生或专业教练。

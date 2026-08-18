@@ -1,6 +1,6 @@
 // 由 scripts/sync-exercises.js 自动生成，请修改 exercises.json 后重新执行脚本。
 module.exports = {
-  "version": 1,
+  "version": 2,
   "disclaimer": "内容仅供一般健身动作参考；首次使用器械时请让教练确认座椅、限位和重量设置。",
   "attribution": "© Gym visual — https://gymvisual.com/",
   "exercises": [

@@ -1,0 +1,119 @@
+.plans-page {
+  min-height: 100vh;
+}
+
+.plans-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24rpx;
+  padding: 48rpx 32rpx 40rpx;
+  color: #fff;
+  background: #123b31;
+}
+
+.eyebrow {
+  color: #c7f24a;
+  font-size: 20rpx;
+  font-weight: 700;
+  letter-spacing: 4rpx;
+}
+
+.plans-title {
+  margin-top: 14rpx;
+  font-size: 46rpx;
+  font-weight: 800;
+}
+
+.plans-copy {
+  margin-top: 10rpx;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 23rpx;
+}
+
+.plans-content {
+  padding: 32rpx;
+}
+
+.plan-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+
+.plan-card {
+  padding: 30rpx;
+  border: 1rpx solid #e3e8e3;
+  border-radius: 24rpx;
+  background: #fff;
+  box-shadow: 0 10rpx 30rpx rgba(18, 59, 49, 0.06);
+}
+
+.plan-name {
+  font-size: 34rpx;
+  font-weight: 700;
+}
+
+.plan-summary {
+  margin-top: 12rpx;
+  color: #68736f;
+  line-height: 1.6;
+}
+
+.plan-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16rpx;
+  margin-top: 24rpx;
+}
+
+button {
+  margin: 0;
+  min-height: 72rpx;
+  border-radius: 36rpx;
+  font-size: 26rpx;
+  line-height: 72rpx;
+}
+
+.primary-button {
+  padding: 0 30rpx;
+  color: #123b31;
+  background: #c7f24a;
+  font-weight: 700;
+}
+
+.header-button {
+  flex: none;
+}
+
+.secondary-button,
+.danger-button {
+  padding: 0 28rpx;
+  background: #edf2ef;
+}
+
+.danger-button {
+  color: #b83737;
+  background: #fff0f0;
+}
+
+.empty-state {
+  padding: 120rpx 40rpx;
+  text-align: center;
+}
+
+.empty-mark {
+  color: #17a673;
+  font-size: 64rpx;
+}
+
+.empty-title {
+  margin-top: 18rpx;
+  font-size: 32rpx;
+  font-weight: 700;
+}
+
+.empty-copy {
+  margin: 14rpx 0 28rpx;
+  color: #7d8783;
+}

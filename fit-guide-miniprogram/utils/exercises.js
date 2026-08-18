@@ -21,4 +21,13 @@ function findExerciseById(exercises, id) {
   return exercises.find((exercise) => exercise.id === id)
 }
 
-module.exports = { categoryOrder, filterExercises, findExerciseById }
+function hydratePlanExercises(items, exercises) {
+  const byId = new Map(exercises.map((exercise) => [exercise.id, exercise]))
+  return items.map((item) => ({
+    ...item,
+    exercise: byId.get(item.exerciseId) || null,
+    missing: !byId.has(item.exerciseId)
+  }))
+}
+
+module.exports = { categoryOrder, filterExercises, findExerciseById, hydratePlanExercises }

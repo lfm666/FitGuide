@@ -27,6 +27,21 @@ global.wx = {
           data: { code: '00000', message: '操作成功', data: false }
         }
       }
+      if (options.path === '/api/v1/training-plans' && options.method === 'GET') {
+        return {
+          statusCode: 200,
+          data: { code: '00000', message: '操作成功', data: [{ id: '12', name: '推日', exercises: [{ exerciseId: exercise.id, setCount: 3 }] }] }
+        }
+      }
+      if (options.path === '/api/v1/training-plans' && options.method === 'POST') {
+        return { statusCode: 200, data: { code: '00000', message: '操作成功', data: { id: '13', ...options.data } } }
+      }
+      if (options.path === '/api/v1/training-plans/12' && options.method === 'PUT') {
+        return { statusCode: 200, data: { code: '00000', message: '操作成功', data: { id: '12', ...options.data } } }
+      }
+      if (options.path === '/api/v1/training-plans/12' && options.method === 'DELETE') {
+        return { statusCode: 200, data: { code: '00000', message: '操作成功', data: true } }
+      }
       return {
         statusCode: 404,
         data: { code: 'EXERCISE_NOT_FOUND', message: '动作不存在', data: null }
@@ -43,7 +58,11 @@ const {
   getExercise,
   getFavoriteIds,
   addFavorite,
-  removeFavorite
+  removeFavorite,
+  getTrainingPlans,
+  createTrainingPlan,
+  updateTrainingPlan,
+  deleteTrainingPlan
 } = require('../utils/api')
 
 async function main() {
@@ -82,7 +101,27 @@ async function main() {
   assert.equal(calls[0].header['X-WX-SERVICE'], 'springboot-7pqe')
   assert.equal(calls[0].header['X-WX-OPENID'], undefined)
 
-  console.log('本地动作数据与后端收藏接口检查通过')
+  const payload = { name: '推日', exercises: [{ exerciseId: exercise.id, setCount: 3 }] }
+  assert.equal(typeof payload.exercises[0].exerciseId, 'string')
+  assert.equal((await getTrainingPlans())[0].id, '12')
+  assert.equal((await createTrainingPlan(payload)).id, '13')
+  assert.equal((await updateTrainingPlan('12', payload)).id, '12')
+  assert.equal(await deleteTrainingPlan('12'), true)
+  assert.deepEqual(
+    calls.slice(-4).map(({ path, method }) => [path, method]),
+    [
+      ['/api/v1/training-plans', 'GET'],
+      ['/api/v1/training-plans', 'POST'],
+      ['/api/v1/training-plans/12', 'PUT'],
+      ['/api/v1/training-plans/12', 'DELETE']
+    ]
+  )
+  assert.deepEqual(calls.at(-3).data, payload)
+  assert.deepEqual(calls.at(-2).data, payload)
+  assert.equal(calls.at(-4).header['X-WX-OPENID'], undefined)
+  assert.equal(calls.at(-3).header['content-type'], 'application/json')
+
+  console.log('本地动作数据、收藏与训练计划接口检查通过')
 }
 
 main().catch((error) => {

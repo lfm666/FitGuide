@@ -1,3 +1,6 @@
+<import src="../../templates/share-home.wxml" />
+<block wx:if="{{timelineShare}}"><template is="share-home" /></block>
+<block wx:else>
 <view wx:if="{{exercise}}" class="page safe-bottom">
   <view class="intro">
     <view class="title-row">
@@ -90,3 +93,4 @@
   <view class="not-found-copy">请检查网络后重试。</view>
   <button class="home-button" bindtap="retryLoad">重新加载</button>
 </view>
+</block>

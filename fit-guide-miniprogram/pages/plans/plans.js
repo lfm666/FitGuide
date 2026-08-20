@@ -1,5 +1,7 @@
 const { getCatalog, getTrainingPlans, deleteTrainingPlan } = require('../../utils/api')
 const { hydratePlanExercises } = require('../../utils/exercises')
+const { resolveMedia } = require('../../utils/media')
+const { shareAppMessage, shareTimeline, handleTimelineShare } = require('../../utils/share')
 
 Page({
   data: {
@@ -9,7 +11,12 @@ Page({
     deletingPlanId: ''
   },
 
+  onLoad(options) {
+    this.timelineShare = handleTimelineShare(options, this)
+  },
+
   onShow() {
+    if (this.timelineShare) return
     this.loadPlans()
   },
 
@@ -17,17 +24,32 @@ Page({
     this.setData({ plans: [], loading: true, loadFailed: false })
     try {
       const [plans, catalog] = await Promise.all([getTrainingPlans(), getCatalog()])
+      const hydratedPlans = plans.map((plan) => ({
+        plan,
+        items: hydratePlanExercises(plan.exercises, catalog.exercises)
+      }))
+      const resolvedPreviews = await resolveMedia(hydratedPlans.flatMap(({ items }) => (
+        items.slice(0, 2).filter(({ exercise }) => exercise).map(({ exercise }) => exercise)
+      )))
+      let mediaIndex = 0
+
       this.setData({
-        plans: plans.map((plan) => {
-          const items = hydratePlanExercises(plan.exercises, catalog.exercises)
-          return {
-            ...plan,
-            exerciseCount: items.length,
-            exerciseNames: items.slice(0, 3)
-              .map((item) => item.exercise ? item.exercise.name : `动作已失效（${item.exerciseId}）`)
-              .join(' / ')
-          }
-        }),
+        plans: hydratedPlans.map(({ plan, items }) => ({
+          id: plan.id,
+          name: plan.name,
+          exerciseCount: items.length,
+          totalSetCount: items.reduce((total, { setCount }) => total + setCount, 0),
+          hiddenExerciseCount: Math.max(0, items.length - 2),
+          previewItems: items.slice(0, 2).map((item) => {
+            const exercise = item.exercise ? resolvedPreviews[mediaIndex++] : null
+            return {
+              exerciseId: item.exerciseId,
+              setCount: item.setCount,
+              name: exercise ? exercise.name : `动作已失效（${item.exerciseId}）`,
+              image: exercise ? exercise.image : ''
+            }
+          })
+        })),
         loading: false
       })
     } catch (error) {
@@ -40,8 +62,17 @@ Page({
     wx.navigateTo({ url: '/pages/plan/edit' })
   },
 
+  openPlan(event) {
+    wx.navigateTo({ url: `/pages/plan/detail?id=${encodeURIComponent(event.currentTarget.dataset.id)}` })
+  },
+
   editPlan(event) {
     wx.navigateTo({ url: `/pages/plan/edit?id=${encodeURIComponent(event.currentTarget.dataset.id)}` })
+  },
+
+  onImageError(event) {
+    const { planIndex, previewIndex } = event.currentTarget.dataset
+    this.setData({ [`plans[${planIndex}].previewItems[${previewIndex}].imageFailed`]: true })
   },
 
   deletePlan(event) {
@@ -65,5 +96,8 @@ Page({
         }
       }
     })
-  }
+  },
+
+  onShareAppMessage: shareAppMessage,
+  onShareTimeline: shareTimeline
 })

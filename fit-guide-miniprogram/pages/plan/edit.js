@@ -7,6 +7,7 @@ const {
   updateTrainingPlan
 } = require('../../utils/api')
 const { filterExercises, hydratePlanExercises } = require('../../utils/exercises')
+const { shareAppMessage, shareTimeline, handleTimelineShare } = require('../../utils/share')
 
 Page({
   data: {
@@ -27,6 +28,7 @@ Page({
   },
 
   onLoad(options) {
+    if (handleTimelineShare(options, this)) return
     this.requestedPlanId = typeof options.id === 'string' ? options.id : ''
     this.loadEditor()
   },
@@ -201,5 +203,8 @@ Page({
 
   backToPlans() {
     wx.switchTab({ url: '/pages/plans/plans' })
-  }
+  },
+
+  onShareAppMessage: shareAppMessage,
+  onShareTimeline: shareTimeline
 })

@@ -1,6 +1,7 @@
 const { getCatalog, getCategories, getEquipments } = require('../../utils/api')
 const { filterExercises } = require('../../utils/exercises')
 const { resolveMedia } = require('../../utils/media')
+const { shareAppMessage, shareTimeline, handleTimelineShare } = require('../../utils/share')
 
 Page({
   data: {
@@ -15,7 +16,8 @@ Page({
     mediaFailed: false
   },
 
-  async onLoad() {
+  async onLoad(options) {
+    if (handleTimelineShare(options, this)) return
     await this.loadCatalog()
   },
 
@@ -89,5 +91,8 @@ Page({
 
   onImageError(event) {
     this.setData({ [`exercises[${event.currentTarget.dataset.index}].imageFailed`]: true })
-  }
+  },
+
+  onShareAppMessage: shareAppMessage,
+  onShareTimeline: shareTimeline
 })

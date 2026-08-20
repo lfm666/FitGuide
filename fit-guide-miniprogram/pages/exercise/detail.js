@@ -1,6 +1,7 @@
 const { getExercise } = require('../../utils/api')
 const { getFavoriteIds, toggleFavorite: toggleStoredFavorite } = require('../../utils/favorites')
 const { resolveMedia } = require('../../utils/media')
+const { shareAppMessage, shareTimeline, handleTimelineShare } = require('../../utils/share')
 
 Page({
   data: {
@@ -17,6 +18,7 @@ Page({
   },
 
   async onLoad(options) {
+    if (handleTimelineShare(options, this)) return
     this.exerciseId = options.id
     await this.loadExercise()
   },
@@ -104,5 +106,8 @@ Page({
 
   goHome() {
     wx.reLaunch({ url: '/pages/index/index' })
-  }
+  },
+
+  onShareAppMessage: shareAppMessage,
+  onShareTimeline: shareTimeline
 })

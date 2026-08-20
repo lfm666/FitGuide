@@ -1,11 +1,14 @@
+<import src="../../templates/share-home.wxml" />
+<block wx:if="{{timelineShare}}"><template is="share-home" /></block>
+<block wx:else>
 <view class="plans-page safe-bottom">
   <view class="plans-header">
-    <view>
+    <view class="header-copy">
       <view class="eyebrow">TRAINING PLANS</view>
-      <view class="plans-title">我的训练计划</view>
-      <view class="plans-copy">安排动作和组数，按自己的节奏训练</view>
+      <view class="plans-title">训练计划</view>
+      <view class="plans-copy">让每一次训练都有章法</view>
     </view>
-    <button class="primary-button header-button" bindtap="createPlan" aria-label="新建训练计划">新建计划</button>
+    <button class="new-button" bindtap="createPlan" aria-label="新建训练计划">＋ 新建</button>
   </view>
 
   <view class="plans-content">
@@ -19,23 +22,81 @@
       <button class="secondary-button" bindtap="loadPlans">重新加载</button>
     </view>
 
-    <view wx:elif="{{plans.length}}" class="plan-list">
-      <view wx:for="{{plans}}" wx:key="id" class="plan-card">
-        <view class="plan-name">{{item.name}}</view>
-        <view class="plan-summary">{{item.exerciseCount}} 个动作 · {{item.exerciseNames}}</view>
-        <view class="plan-actions">
-          <button class="secondary-button" data-id="{{item.id}}" bindtap="editPlan" aria-label="编辑{{item.name}}">编辑</button>
-          <button
-            class="danger-button"
+    <block wx:elif="{{plans.length}}">
+      <view class="section-heading">
+        <view class="section-title">我的计划</view>
+        <view class="section-count">共 {{plans.length}} 个</view>
+      </view>
+
+      <view class="plan-list">
+        <view wx:for="{{plans}}" wx:key="id" wx:for-index="planIndex" class="plan-card">
+          <view
+            class="plan-main"
+            hover-class="plan-pressed"
             data-id="{{item.id}}"
-            bindtap="deletePlan"
-            loading="{{deletingPlanId === item.id}}"
-            disabled="{{deletingPlanId === item.id}}"
-            aria-label="删除{{item.name}}"
-          >删除</button>
+            bindtap="openPlan"
+            role="button"
+            aria-label="查看{{item.name}}训练计划"
+          >
+            <view class="plan-heading">
+              <view>
+                <view class="plan-name">{{item.name}}</view>
+                <view class="plan-summary">{{item.exerciseCount}} 个动作 · 共 {{item.totalSetCount}} 组</view>
+              </view>
+              <view class="plan-arrow" aria-hidden="true">↗</view>
+            </view>
+
+            <view class="preview-row">
+              <view
+                wx:for="{{item.previewItems}}"
+                wx:key="exerciseId"
+                wx:for-item="exercise"
+                wx:for-index="previewIndex"
+                class="preview-item"
+              >
+                <view class="preview-cover">
+                  <image
+                    wx:if="{{exercise.image && !exercise.imageFailed}}"
+                    class="preview-image"
+                    src="{{exercise.image}}"
+                    mode="aspectFill"
+                    lazy-load
+                    data-plan-index="{{planIndex}}"
+                    data-preview-index="{{previewIndex}}"
+                    binderror="onImageError"
+                  />
+                  <view wx:else class="preview-fallback">FG</view>
+                </view>
+                <view class="preview-copy">
+                  <view class="preview-name">{{exercise.name}}</view>
+                  <view class="preview-sets">{{exercise.setCount}} 组</view>
+                </view>
+              </view>
+
+              <view wx:if="{{item.hiddenExerciseCount}}" class="more-actions">
+                <view class="more-count">+{{item.hiddenExerciseCount}}</view>
+                <view class="more-label">个动作</view>
+              </view>
+            </view>
+          </view>
+
+          <view class="plan-footer">
+            <view class="footer-hint">点击卡片查看完整安排</view>
+            <view class="plan-actions">
+              <button class="text-button" data-id="{{item.id}}" catchtap="editPlan" aria-label="编辑{{item.name}}">编辑</button>
+              <button
+                class="text-button danger-button"
+                data-id="{{item.id}}"
+                catchtap="deletePlan"
+                loading="{{deletingPlanId === item.id}}"
+                disabled="{{deletingPlanId === item.id}}"
+                aria-label="删除{{item.name}}"
+              >删除</button>
+            </view>
+          </view>
         </view>
       </view>
-    </view>
+    </block>
 
     <view wx:else class="empty-state">
       <view class="empty-mark">＋</view>
@@ -45,3 +106,4 @@
     </view>
   </view>
 </view>
+</block>

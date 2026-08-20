@@ -12,3 +12,66 @@ button::after {
 .safe-bottom {
   padding-bottom: calc(32rpx + env(safe-area-inset-bottom));
 }
+
+.share-home {
+  min-height: 100vh;
+  background: #f6f7f3;
+}
+
+.share-home-hero {
+  padding: 96rpx 48rpx 72rpx;
+  color: #fff;
+  background: #123b31;
+}
+
+.share-home-eyebrow {
+  color: #c7f24a;
+  font-size: 22rpx;
+  font-weight: 800;
+  letter-spacing: 5rpx;
+}
+
+.share-home-title {
+  margin-top: 24rpx;
+  font-size: 52rpx;
+  font-weight: 800;
+}
+
+.share-home-copy {
+  margin-top: 20rpx;
+  color: #dbe8e2;
+  font-size: 26rpx;
+}
+
+.share-home-content {
+  padding: 36rpx 32rpx;
+}
+
+.share-home-card,
+.share-home-features {
+  border: 2rpx solid #e2e7e4;
+  border-radius: 28rpx;
+  background: #fff;
+}
+
+.share-home-card {
+  padding: 36rpx;
+}
+
+.share-home-number {
+  color: #13815d;
+  font-size: 60rpx;
+  font-weight: 800;
+}
+
+.share-home-label {
+  margin-top: 8rpx;
+  color: #596760;
+}
+
+.share-home-features {
+  margin-top: 24rpx;
+  padding: 18rpx 32rpx;
+  color: #31423d;
+  line-height: 2.4;
+}

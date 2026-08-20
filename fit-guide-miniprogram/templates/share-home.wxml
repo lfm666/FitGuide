@@ -1,0 +1,20 @@
+<template name="share-home">
+  <view class="share-home safe-bottom">
+    <view class="share-home-hero">
+      <view class="share-home-eyebrow">FITGUIDE</view>
+      <view class="share-home-title">今天，练得更标准</view>
+      <view class="share-home-copy">找到器械 · 看懂动作 · 安全完成</view>
+    </view>
+    <view class="share-home-content">
+      <view class="share-home-card">
+        <view class="share-home-number">1324</view>
+        <view class="share-home-label">个中文健身动作与演示</view>
+      </view>
+      <view class="share-home-features">
+        <view>按部位和器械筛选动作</view>
+        <view>查看动作步骤与肌群说明</view>
+        <view>收藏动作并安排训练计划</view>
+      </view>
+    </view>
+  </view>
+</template>

@@ -1,0 +1,92 @@
+<import src="../../templates/share-home.wxml" />
+<block wx:if="{{timelineShare}}"><template is="share-home" /></block>
+<block wx:else>
+<view class="detail-page safe-bottom">
+  <view wx:if="{{loading}}" class="empty-state">
+    <view class="empty-title">训练计划加载中</view>
+  </view>
+
+  <view wx:elif="{{loadFailed}}" class="empty-state">
+    <view class="empty-title">训练计划加载失败</view>
+    <view class="empty-copy">请检查网络后重试</view>
+    <button class="secondary-button" bindtap="loadPlan">重新加载</button>
+  </view>
+
+  <view wx:elif="{{notFound}}" class="empty-state">
+    <view class="empty-mark">?</view>
+    <view class="empty-title">计划不存在或已删除</view>
+    <view class="empty-copy">返回计划列表刷新后再试</view>
+    <button class="primary-button" bindtap="backToPlans">返回计划列表</button>
+  </view>
+
+  <block wx:elif="{{plan}}">
+    <view class="detail-header">
+      <view class="eyebrow">TODAY'S WORKOUT</view>
+      <view class="detail-title">{{plan.name}}</view>
+      <view class="detail-copy">按顺序完成动作，保持稳定节奏</view>
+    </view>
+
+    <view class="summary-card">
+      <view class="summary-item">
+        <view class="summary-value">{{plan.exerciseCount}}</view>
+        <view class="summary-label">动作</view>
+      </view>
+      <view class="summary-divider"></view>
+      <view class="summary-item">
+        <view class="summary-value">{{plan.totalSetCount}}</view>
+        <view class="summary-label">总组数</view>
+      </view>
+    </view>
+
+    <view class="detail-content">
+      <view class="section-heading">
+        <view class="section-title">动作安排</view>
+        <view class="section-copy">点击动作查看演示</view>
+      </view>
+
+      <view class="exercise-list">
+        <view
+          wx:for="{{plan.items}}"
+          wx:key="exerciseId"
+          class="exercise-card {{item.missing ? 'missing-card' : ''}}"
+          hover-class="{{item.missing ? '' : 'exercise-pressed'}}"
+          data-id="{{item.exerciseId}}"
+          data-missing="{{item.missing}}"
+          bindtap="openExercise"
+          role="button"
+          aria-label="{{item.missing ? item.name : '查看' + item.name + '动作演示'}}"
+        >
+          <view class="exercise-cover">
+            <image
+              wx:if="{{item.image && !item.imageFailed}}"
+              class="exercise-image"
+              src="{{item.image}}"
+              mode="aspectFill"
+              lazy-load
+              data-index="{{index}}"
+              binderror="onImageError"
+            />
+            <view wx:else class="exercise-fallback">FG</view>
+          </view>
+
+          <view class="exercise-main">
+            <view class="exercise-heading">
+              <view class="exercise-name">{{item.name}}</view>
+              <view class="exercise-index">{{index + 1}}</view>
+            </view>
+            <view class="exercise-meta">{{item.metaText}}{{item.muscleText ? ' · ' + item.muscleText : ''}}</view>
+            <view class="set-row">
+              <text class="set-icon" aria-hidden="true">▱</text>
+              <text class="set-count">{{item.setCount}} 组</text>
+              <text wx:if="{{!item.missing}}" class="set-copy">· 完成后进入下一动作</text>
+            </view>
+          </view>
+          <view wx:if="{{!item.missing}}" class="exercise-arrow" aria-hidden="true">›</view>
+        </view>
+      </view>
+
+      <button class="edit-button" bindtap="editPlan" aria-label="编辑{{plan.name}}训练计划">编辑计划</button>
+    </view>
+  </block>
+</view>
+</block>

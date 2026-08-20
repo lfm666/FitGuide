@@ -1,3 +1,6 @@
+<import src="../../templates/share-home.wxml" />
+<block wx:if="{{timelineShare}}"><template is="share-home" /></block>
+<block wx:else>
 <view class="page favorites-page safe-bottom">
   <view class="favorites-header">
     <view class="eyebrow">FAVORITES</view>
@@ -70,3 +73,4 @@
     </view>
   </view>
 </view>
+</block>

@@ -1,6 +1,7 @@
 const { getCatalog } = require('../../utils/api')
 const { getFavoriteIds } = require('../../utils/favorites')
 const { resolveMedia } = require('../../utils/media')
+const { shareAppMessage, shareTimeline, handleTimelineShare } = require('../../utils/share')
 
 Page({
   data: {
@@ -9,7 +10,12 @@ Page({
     mediaFailed: false
   },
 
+  onLoad(options) {
+    this.timelineShare = handleTimelineShare(options, this)
+  },
+
   async onShow() {
+    if (this.timelineShare) return
     this.setData({ exercises: [], mediaReady: false, mediaFailed: false })
 
     try {
@@ -47,5 +53,8 @@ Page({
 
   onImageError(event) {
     this.setData({ [`exercises[${event.currentTarget.dataset.index}].imageFailed`]: true })
-  }
+  },
+
+  onShareAppMessage: shareAppMessage,
+  onShareTimeline: shareTimeline
 })

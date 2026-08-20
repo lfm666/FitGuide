@@ -3,6 +3,7 @@
     "pages/index/index",
     "pages/favorites/favorites",
     "pages/plans/plans",
+    "pages/plan/detail",
     "pages/plan/edit",
     "pages/exercise/detail"
   ],

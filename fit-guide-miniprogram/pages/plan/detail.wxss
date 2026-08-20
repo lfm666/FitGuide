@@ -1,0 +1,289 @@
+.detail-page {
+  min-height: 100vh;
+  background: #f6f7f3;
+}
+
+.detail-header {
+  padding: 48rpx 34rpx 86rpx;
+  color: #fff;
+  background: #123b31;
+}
+
+.eyebrow {
+  color: #c7f24a;
+  font-size: 20rpx;
+  font-weight: 700;
+  letter-spacing: 4rpx;
+}
+
+.detail-title {
+  margin-top: 14rpx;
+  font-size: 52rpx;
+  font-weight: 800;
+}
+
+.detail-copy {
+  margin-top: 12rpx;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 24rpx;
+}
+
+.summary-card {
+  display: flex;
+  align-items: center;
+  width: calc(100% - 64rpx);
+  min-height: 142rpx;
+  margin: -50rpx auto 0;
+  border-radius: 26rpx;
+  background: #fff;
+  box-shadow: 0 14rpx 34rpx rgba(18, 59, 49, 0.12);
+}
+
+.summary-item {
+  flex: 1;
+  text-align: center;
+}
+
+.summary-divider {
+  width: 2rpx;
+  height: 68rpx;
+  background: #e4e9e5;
+}
+
+.summary-value {
+  font-size: 38rpx;
+  font-weight: 800;
+}
+
+.summary-label {
+  margin-top: 6rpx;
+  color: #7d8783;
+  font-size: 21rpx;
+}
+
+.detail-content {
+  padding: 42rpx 28rpx 24rpx;
+}
+
+.section-heading,
+.exercise-heading,
+.set-row {
+  display: flex;
+  align-items: center;
+}
+
+.section-heading {
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 0 6rpx 20rpx;
+}
+
+.section-title {
+  font-size: 34rpx;
+  font-weight: 700;
+}
+
+.section-copy {
+  color: #7d8783;
+  font-size: 22rpx;
+}
+
+.exercise-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18rpx;
+}
+
+.exercise-card {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  min-height: 190rpx;
+  padding: 16rpx;
+  border: 2rpx solid #e2e7e4;
+  border-radius: 26rpx;
+  background: #fff;
+  box-sizing: border-box;
+  box-shadow: 0 8rpx 24rpx rgba(18, 59, 49, 0.05);
+  transition: transform 120ms ease;
+}
+
+.exercise-pressed {
+  transform: scale(0.985);
+}
+
+.missing-card {
+  border-color: #e7c9a7;
+  background: #fffaf3;
+}
+
+.exercise-cover {
+  flex: 0 0 176rpx;
+  width: 176rpx;
+  height: 158rpx;
+  overflow: hidden;
+  border-radius: 18rpx;
+  background: #dfe9e3;
+}
+
+.exercise-image,
+.exercise-fallback {
+  width: 100%;
+  height: 100%;
+}
+
+.exercise-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #45675d;
+  font-size: 32rpx;
+  font-weight: 800;
+  letter-spacing: 3rpx;
+}
+
+.exercise-main {
+  min-width: 0;
+  flex: 1;
+}
+
+.exercise-heading {
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12rpx;
+}
+
+.exercise-name {
+  display: -webkit-box;
+  overflow: hidden;
+  min-width: 0;
+  font-size: 28rpx;
+  font-weight: 700;
+  line-height: 1.35;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.exercise-index {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 44rpx;
+  width: 44rpx;
+  height: 44rpx;
+  border-radius: 50%;
+  color: #123b31;
+  background: #dff3e8;
+  font-size: 21rpx;
+  font-weight: 700;
+}
+
+.exercise-meta {
+  display: -webkit-box;
+  overflow: hidden;
+  margin-top: 10rpx;
+  color: #75807c;
+  font-size: 21rpx;
+  line-height: 1.4;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
+.set-row {
+  min-width: 0;
+  margin-top: 16rpx;
+  color: #15805d;
+  font-size: 22rpx;
+}
+
+.set-icon {
+  margin-right: 8rpx;
+  font-size: 28rpx;
+  transform: rotate(90deg);
+}
+
+.set-count {
+  flex: none;
+  font-weight: 700;
+}
+
+.set-copy {
+  overflow: hidden;
+  margin-left: 6rpx;
+  color: #7c8783;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.exercise-arrow {
+  flex: none;
+  color: #8a9490;
+  font-size: 42rpx;
+}
+
+button {
+  margin: 0;
+}
+
+.edit-button,
+.primary-button,
+.secondary-button {
+  min-height: 82rpx;
+  padding: 0 34rpx;
+  border-radius: 41rpx;
+  font-size: 26rpx;
+  line-height: 82rpx;
+}
+
+.edit-button {
+  width: 100%;
+  margin-top: 28rpx;
+  color: #123b31;
+  background: #c7f24a;
+  font-weight: 700;
+}
+
+.primary-button {
+  color: #123b31;
+  background: #c7f24a;
+  font-weight: 700;
+}
+
+.secondary-button {
+  background: #e8eeea;
+}
+
+.empty-state {
+  display: flex;
+  min-height: 70vh;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 80rpx 48rpx;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.empty-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 104rpx;
+  height: 104rpx;
+  border-radius: 50%;
+  color: #123b31;
+  background: #c7f24a;
+  font-size: 48rpx;
+  font-weight: 700;
+}
+
+.empty-title {
+  margin-top: 24rpx;
+  font-size: 32rpx;
+  font-weight: 700;
+}
+
+.empty-copy {
+  margin: 14rpx 0 28rpx;
+  color: #7d8783;
+}

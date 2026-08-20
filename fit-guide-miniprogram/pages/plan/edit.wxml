@@ -1,3 +1,6 @@
+<import src="../../templates/share-home.wxml" />
+<block wx:if="{{timelineShare}}"><template is="share-home" /></block>
+<block wx:else>
 <view class="edit-page safe-bottom">
   <view wx:if="{{loading}}" class="empty-state">
     <view class="empty-title">编辑器加载中</view>
@@ -147,3 +150,4 @@
     </view>
   </block>
 </view>
+</block>

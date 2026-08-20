@@ -20,6 +20,14 @@ FitGuide 由微信原生小程序和 Spring Boot 后端组成。小程序内置 
 > [!IMPORTANT]
 > 动作数据与媒体来自 [hasaneyldrm/exercises-dataset](https://github.com/hasaneyldrm/exercises-dataset)。来源项目的代码与数据采用 MIT License；图片、GIF 等媒体版权归 [GymVisual](https://gymvisual.com/) 所有，不属于 MIT 授权范围。
 
+## 微信扫码体验
+
+<div align="center">
+  <img src="screenshots/fitguide-mini-program-code.jpg" alt="FitGuide 微信小程序码" width="180">
+  <p><strong>微信扫一扫，打开 FitGuide</strong></p>
+  <p>1324 个中文健身动作：找到器械、看懂动作、收藏常练项目并安排训练计划。</p>
+</div>
+
 ## 应用截图
 
 ### 动作浏览与收藏
